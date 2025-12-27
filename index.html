@@ -1,0 +1,5654 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proceso de Arepas - Control Completo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --color-success: #4CAF50;
+      --color-warning: #FF9800;
+      --color-danger: #F44336;
+      --color-info: #2196F3;
+      --color-light: #f8f9fa;
+      --color-dark: #212529;
+      --bg-color: white;
+      --text-color: #212529;
+      --input-bg: white;
+      --input-border: #ddd;
+      --card-bg: white;
+      --card-border: #eee;
+      --nav-bg: white;
+      --time-info-bg: #f8f9fa;
+      --font-size-base: 18px;
+      --font-size-small: 16px;
+      --font-size-large: 20px;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+      font-size: var(--font-size-base);
+    }
+    
+    .app-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg-color);
+      min-height: 100vh;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    #cocinar-screen {
+      --color-primario: #4CAF50; /* Verde */
+      --color-secundario: #E8F5E9;
+    }
+    
+    #formado-screen {
+      --color-primario: #FF9800; /* Naranja */
+      --color-secundario: #FFF3E0;
+    }
+    
+    #empaque-screen {
+      --color-primario: #F44336; /* Rojo */
+      --color-secundario: #FFEBEE;
+    }
+    
+    #historico-screen {
+      --color-primario: #9C27B0; /* Morado */
+      --color-secundario: #F3E5F5;
+    }
+    
+    #programacion-screen {
+      --color-primario: #2196F3; /* Azul */
+      --color-secundario: #E3F2FD;
+    }
+    
+    /* ESTILOS PARA PANTALLA TV MADRE - NUEVA PANTALLA */
+    #tv-madre-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+      color: white;
+      z-index: 2000;
+      display: none;
+      overflow: hidden;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #tv-madre-screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tv-madre-header {
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 15px 30px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .tv-madre-title {
+      font-size: 64px;
+      font-weight: 900;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+      line-height: 1.1;
+      color: #FFD700;
+    }
+
+    .tv-madre-subtitle {
+      font-size: 36px;
+      margin-top: 10px;
+      opacity: 0.9;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #ffffff;
+    }
+
+    .tv-madre-fecha-hora {
+      font-size: 32px;
+      font-weight: 700;
+      text-align: center;
+      opacity: 0.9;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      margin-top: 10px;
+      color: #FFD700;
+    }
+
+    .tv-madre-content {
+      padding: 20px 30px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tv-madre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-bottom: 20px;
+    }
+
+    .tv-madre-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .tv-madre-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .tv-madre-card-title {
+      font-size: 40px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: #FFD700;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-bottom: 3px solid rgba(255, 215, 0, 0.5);
+      padding-bottom: 10px;
+    }
+
+    .tv-madre-card-title i {
+      font-size: 44px;
+    }
+
+    .tv-madre-card-content {
+      font-size: 32px;
+    }
+
+    .tv-madre-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding: 12px 15px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      transition: background 0.3s ease;
+    }
+
+    .tv-madre-item:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .tv-madre-item-label {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .tv-madre-item-value {
+      font-weight: 800;
+      color: #FFD700;
+      text-align: right;
+    }
+
+    .tv-madre-status-badge {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      margin-left: 15px;
+      display: inline-block;
+    }
+
+    .tv-madre-status-coccion {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .tv-madre-status-formado {
+      background-color: #FF9800;
+      color: white;
+    }
+
+    .tv-madre-status-empaque {
+      background-color: #F44336;
+      color: white;
+    }
+
+    .tv-madre-status-completado {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .tv-madre-producto-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-left: 5px solid #FFD700;
+    }
+
+    .tv-madre-producto-nombre {
+      font-size: 30px;
+      font-weight: 700;
+      color: #FFD700;
+      margin-bottom: 8px;
+    }
+
+    .tv-madre-producto-details {
+      display: flex;
+      justify-content: space-between;
+      font-size: 26px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .tv-madre-empty-state {
+      text-align: center;
+      padding: 40px;
+      font-size: 36px;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+    .tv-madre-empty-state i {
+      font-size: 72px;
+      margin-bottom: 20px;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .tv-madre-totales {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .tv-madre-total-card {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .tv-madre-total-label {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a237e;
+      margin-bottom: 10px;
+    }
+
+    .tv-madre-total-value {
+      font-size: 48px;
+      font-weight: 900;
+      color: #1a237e;
+    }
+
+    /* ESTILOS CORREGIDOS PARA PANTALLA DE TV - PROGRAMACIÓN */
+    #tv-programacion-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #303F9F;
+      color: white;
+      z-index: 2000;
+      display: none;
+      overflow: hidden;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #tv-programacion-screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ESTILOS NUEVOS PARA PANTALLA DE TV - EMPAQUE */
+    #tv-empaque-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background-color: #303F9F;
+      color: white;
+      z-index: 2000;
+      display: none;
+      overflow: hidden;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #tv-empaque-screen.active {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* CORRECCIÓN: Encabezado más compacto para pantallas TV */
+    .tv-header {
+      background-color: rgba(0,0,0,0.2);
+      padding: 10px 20px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      min-height: 70px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* CORRECCIÓN: Título y fecha en la misma línea */
+    .tv-header-contenedor {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .tv-titulo-contenedor {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .tv-title {
+      font-size: 48px;
+      font-weight: 900;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      line-height: 1.1;
+    }
+
+    .tv-subtitle {
+      font-size: 32px;
+      margin-top: 5px;
+      opacity: 0.9;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .tv-fecha {
+      font-size: 36px;
+      font-weight: 700;
+      text-align: right;
+      opacity: 0.9;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .tv-content {
+      padding: 15px 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* CORRECCIÓN: Tabla de programación TV - MEJORADA Y MÁS GRANDE */
+    .tv-tabla-programacion, #tv-tabla-empaque {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      border-radius: 15px;
+      overflow: hidden;
+      font-size: 42px;
+      table-layout: fixed;
+      flex-grow: 1;
+      height: calc(100vh - 150px);
+    }
+
+    .tv-tabla-programacion th, #tv-tabla-empaque th {
+      background-color: rgba(0,0,0,0.3);
+      color: white;
+      padding: 25px 15px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 38px;
+      white-space: nowrap;
+    }
+
+    .tv-tabla-programacion td, #tv-tabla-empaque td {
+      padding: 22px 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      background-color: white;
+      color: #333;
+      font-size: 36px;
+      font-weight: 800;
+      text-align: center;
+      vertical-align: middle;
+      height: auto;
+    }
+
+    .tv-tabla-programacion tr:nth-child(even) td, #tv-tabla-empaque tr:nth-child(even) td {
+      background-color: #f5f5f5;
+    }
+
+    .tv-tabla-programacion tr:nth-child(odd) td, #tv-tabla-empaque tr:nth-child(odd) td {
+      background-color: white;
+    }
+
+    .tv-tabla-programacion tr:hover td, #tv-tabla-empaque tr:hover td {
+      background-color: #e8e8e8;
+    }
+
+    /* NUEVOS ESTILOS PARA ICONOS EN TV */
+    .tv-icon {
+      font-size: 38px;
+      margin-right: 10px;
+      width: 40px;
+      text-align: center;
+    }
+
+    /* ELIMINADO: Botón volver en pantallas TV */
+    .tv-volver-btn {
+      display: none;
+    }
+
+    .tv-sin-programacion {
+      text-align: center;
+      padding: 80px;
+      font-size: 48px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 700;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* NUEVO ESTILO PARA LÍNEA AZUL EN TV EMPAQUE Y PROGRAMACIÓN */
+    .tv-producto-grupo td {
+      border-top: 8px solid #2196F3 !important;
+      background-color: white !important;
+      font-weight: bold;
+    }
+
+    /* CORRECCIÓN: Asegurar que la línea azul se muestre en la tabla de TV Empaque */
+    #tv-tabla-empaque .tv-producto-grupo td {
+      border-top: 8px solid #2196F3 !important;
+      background-color: white !important;
+      font-weight: bold;
+    }
+
+    /* CORRECCIÓN: Asegurar que la línea azul se muestre en la tabla de TV Programación */
+    .tv-tabla-programacion .tv-producto-grupo td {
+      border-top: 8px solid #2196F3 !important;
+      background-color: white !important;
+      font-weight: bold;
+    }
+    
+    /* ESTILOS ORIGINALES (sin cambios) */
+    .app-bar {
+      background: var(--color-primario);
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: var(--font-size-large);
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s;
+    }
+    
+    .app-title {
+      flex: 1;
+    }
+    
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: var(--font-size-base);
+      cursor: pointer;
+    }
+    
+    .screen {
+      padding: 15px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .screen.active {
+      display: block;
+    }
+    
+    .section-title {
+      color: var(--color-primario);
+      border-bottom: 2px solid var(--color-primario);
+      padding-bottom: 6px;
+      margin-top: 15px;
+      font-size: var(--font-size-base);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .input-group {
+      margin-bottom: 15px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: var(--text-color);
+      font-size: var(--font-size-small);
+    }
+    
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: var(--font-size-small);
+      transition: border 0.3s;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+    }
+    
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--color-primario);
+      outline: none;
+    }
+    
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      gap: 10px;
+    }
+    
+    button {
+      padding: 12px 15px;
+      border: none;
+      border-radius: 4px;
+      background: var(--color-primario);
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      font-size: var(--font-size-small);
+      flex: 1;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    
+    button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      background: #cccccc !important;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .time-info {
+      background: var(--time-info-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-top: 15px;
+      border-left: 3px solid var(--color-primario);
+      font-size: var(--font-size-small);
+      animation: slideIn 0.3s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    .time-row {
+      display: flex;
+      margin-bottom: 5px;
+      font-size: var(--font-size-small);
+    }
+    
+    .time-label {
+      font-weight: 500;
+      width: 120px;
+      color: var(--text-color);
+    }
+    
+    .time-value {
+      flex-grow: 1;
+    }
+    
+    .nav-bar {
+      display: flex;
+      justify-content: space-around;
+      background: var(--nav-bg);
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+    
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5px 10px;
+      color: #777;
+      cursor: pointer;
+      font-size: var(--font-size-small);
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+    
+    .nav-item.active {
+      color: var(--color-primario);
+      font-weight: 500;
+      transform: translateY(-3px);
+    }
+    
+    .nav-icon {
+      font-size: 24px;
+      margin-bottom: 3px;
+    }
+    
+    .content {
+      padding-bottom: 70px;
+    }
+    
+    .producto-item {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: var(--font-size-small);
+    }
+    
+    .export-btn {
+      margin-top: 15px;
+      background: var(--color-info);
+      width: 100%;
+      padding: 12px;
+      font-size: var(--font-size-small);
+    }
+    
+    .btn-success {
+      background: var(--color-success);
+    }
+    
+    .btn-warning {
+      background: var(--color-warning);
+    }
+    
+    .btn-danger {
+      background: var(--color-danger);
+    }
+    
+    .btn-primary {
+      background: #1976D2;
+    }
+    
+    .btn-indigo {
+      background: #303F9F;
+    }
+    
+    .ollas-disponibles {
+      margin-top: 10px;
+      font-size: var(--font-size-small);
+      color: var(--text-color);
+    }
+    
+    .olla-usada {
+      text-decoration: line-through;
+      color: #999;
+    }
+    
+    .olla-disponible {
+      font-weight: bold;
+      color: var(--color-success);
+      cursor: pointer;
+    }
+    
+    .olla-disponible:hover {
+      text-decoration: underline;
+    }
+    
+    .registro-item {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--color-info);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: var(--font-size-small);
+    }
+    
+    .registro-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: var(--color-info);
+    }
+    
+    .registro-detail {
+      display: flex;
+      margin-bottom: 3px;
+      font-size: var(--font-size-small);
+    }
+    
+    .registro-label {
+      min-width: 140px;
+      color: var(--text-color);
+    }
+    
+    .registro-value {
+      flex-grow: 1;
+    }
+    
+    .search-container {
+      margin-bottom: 15px;
+    }
+    
+    .filters {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .filter-select {
+      flex: 1;
+    }
+    
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--color-success);
+      color: white;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+      z-index: 1000;
+      animation: slideInRight 0.3s ease, fadeOut 0.5s ease 3s forwards;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: var(--font-size-small);
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes fadeOut {
+      to { opacity: 0; }
+    }
+    
+    .notification.error {
+      background: var(--color-danger);
+    }
+    
+    .notification.warning {
+      background: var(--color-warning);
+    }
+    
+    body.dark-mode {
+      --bg-color: #121212;
+      --text-color: #e0e0e0;
+      --input-bg: #2d2d2d;
+      --input-border: #444;
+      --card-bg: #2d2d2d;
+      --card-border: #333;
+      --nav-bg: #1e1e1e;
+      --time-info-bg: #2d2d2d;
+    }
+    
+    .loader {
+      display: inline-block;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--color-primario);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .status-badge {
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: var(--font-size-small);
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    
+    .status-coccion {
+      background-color: #4CAF50;
+      color: white;
+    }
+    
+    .status-formado {
+      background-color: #FF9800;
+      color: white;
+    }
+    
+    .status-empaque {
+      background-color: #F44336;
+      color: white;
+    }
+    
+    .status-completado {
+      background-color: #2196F3;
+      color: white;
+    }
+    
+    .status-pendiente {
+      background-color: #9E9E9E;
+      color: white;
+    }
+    
+    .status-proceso {
+      background-color: #FFC107;
+      color: black;
+    }
+    
+    /* Estilos para la etiqueta */
+    .etiqueta-container {
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 5px;
+      background: white;
+      text-align: center;
+    }
+    
+    .etiqueta {
+      font-family: 'Arial', sans-serif;
+      border: 2px solid #333;
+      padding: 10px;
+      border-radius: 5px;
+      max-width: 300px;
+      margin: 0 auto;
+      background: white;
+      font-size: var(--font-size-small);
+    }
+    
+    .etiqueta h3 {
+      margin: 0;
+      padding-bottom: 5px;
+      border-bottom: 1px solid #333;
+      font-size: var(--font-size-large);
+      color: #333;
+    }
+    
+    .etiqueta p {
+      margin: 5px 0;
+      font-size: var(--font-size-small);
+      color: #555;
+    }
+    
+    .etiqueta-buttons {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    
+    .etiqueta-buttons button {
+      flex: none;
+      padding: 8px 12px;
+      font-size: var(--font-size-small);
+      width: auto;
+    }
+    
+    /* Estilos para el reporte de producción */
+    .reporte-container {
+      margin-top: 15px;
+    }
+    
+    .reporte-item {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border-left: 4px solid #673AB7;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: var(--font-size-small);
+    }
+    
+    .reporte-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #673AB7;
+    }
+    
+    .reporte-detail {
+      display: flex;
+      margin-bottom: 3px;
+      font-size: var(--font-size-small);
+    }
+    
+    .reporte-label {
+      min-width: 140px;
+      color: var(--text-color);
+    }
+    
+    .reporte-value {
+      flex-grow: 1;
+    }
+    
+    .reporte-total {
+      font-weight: bold;
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+      font-size: var(--font-size-base);
+      text-align: center;
+    }
+    
+    /* Estilos para las ollas activas */
+    .ollas-activas-container {
+      margin-top: 15px;
+    }
+    
+    .olla-activa {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--color-success);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: var(--font-size-small);
+    }
+    
+    .olla-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: var(--color-success);
+    }
+    
+    .olla-detail {
+      display: flex;
+      margin-bottom: 3px;
+      font-size: var(--font-size-small);
+    }
+    
+    .olla-label {
+      min-width: 140px;
+      color: var(--text-color);
+    }
+    
+    .olla-value {
+      flex-grow: 1;
+    }
+    
+    .olla-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .olla-actions button {
+      padding: 8px 12px;
+      font-size: var(--font-size-small);
+    }
+    
+    /* Estilos para productos en formado */
+    .productos-formado {
+      margin-top: 15px;
+    }
+    
+    .producto-formado-item {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--color-warning);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: var(--font-size-small);
+    }
+    
+    .producto-formado-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .producto-formado-detail {
+      display: flex;
+      margin-bottom: 3px;
+      font-size: var(--font-size-small);
+    }
+    
+    .producto-formado-label {
+      min-width: 140px;
+      color: var(--text-color);
+    }
+    
+    .producto-formado-value {
+      flex-grow: 1;
+    }
+    
+    .producto-formado-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .producto-formado-actions button {
+      padding: 8px 12px;
+      font-size: var(--font-size-small);
+    }
+    
+    /* Estilos para agregar producto */
+    .agregar-producto-form {
+      margin-top: 15px;
+      padding: 12px;
+      background: var(--card-bg);
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      font-size: var(--font-size-small);
+    }
+    
+    .agregar-producto-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    /* Estilos para etiquetas de productos */
+    .etiquetas-container {
+      margin-top: 20px;
+    }
+    
+    .etiqueta-producto {
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 5px;
+      background: white;
+      font-size: var(--font-size-small);
+    }
+    
+    .etiqueta-producto-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      align-items: center;
+    }
+    
+    /* Modal de impresión */
+    .print-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    
+    .print-modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    
+    .print-modal-title {
+      font-size: var(--font-size-large);
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #333;
+    }
+    
+    .print-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .print-option-btn {
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      background-color: #2196F3;
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: var(--font-size-small);
+    }
+    
+    .print-option-btn i {
+      font-size: 18px;
+    }
+    
+    .print-option-btn.direct {
+      background-color: #4CAF50;
+    }
+    
+    .print-option-btn.direct:hover {
+      background-color: #3d8b40;
+    }
+    
+    .print-option-btn.pdf {
+      background-color: #F44336;
+    }
+    
+    .print-option-btn.pdf:hover {
+      background-color: #d32f2f;
+    }
+    
+    .print-option-btn.cancel {
+      background-color: #9E9E9E;
+    }
+    
+    .print-option-btn.cancel:hover {
+      background-color: #757575;
+    }
+    
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .etiqueta, .etiqueta * {
+        visibility: visible;
+      }
+      .etiqueta {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        border: none;
+      }
+      .etiqueta-buttons {
+        display: none;
+      }
+    }
+    
+    /* Estilos para programación */
+    .programacion-container {
+      margin-top: 15px;
+    }
+    
+    .programacion-item {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border-left: 4px solid #2196F3;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: var(--font-size-small);
+    }
+    
+    .programacion-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #2196F3;
+    }
+    
+    .programacion-detail {
+      display: flex;
+      margin-bottom: 3px;
+      font-size: var(--font-size-small);
+    }
+    
+    .programacion-label {
+      min-width: 140px;
+      color: var(--text-color);
+    }
+    
+    .programacion-value {
+      flex-grow: 1;
+    }
+    
+    .programacion-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .programacion-actions button {
+      padding: 8px 12px;
+      font-size: var(--font-size-small);
+    }
+    
+    .agregar-programacion-form {
+      margin-top: 15px;
+      padding: 12px;
+      background: var(--card-bg);
+      border-radius: 4px;
+      border: 1px solid var(--card-border);
+      font-size: var(--font-size-small);
+    }
+    
+    /* Estilos para los días de programación */
+    .dias-programacion {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 15px;
+      overflow-x: auto;
+      padding-bottom: 5px;
+    }
+    
+    .dia-programacion {
+      padding: 8px 12px;
+      border-radius: 4px;
+      background-color: #f5f5f5;
+      cursor: pointer;
+      font-size: var(--font-size-small);
+      white-space: nowrap;
+    }
+    
+    .dia-programacion.active {
+      background-color: #2196F3;
+      color: white;
+    }
+    
+    .dia-programacion.bloqueado {
+      background-color: #cccccc;
+      color: #666666;
+      cursor: not-allowed;
+    }
+    
+    /* Estilos para empaques múltiples */
+    .empaque-item {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border-left: 4px solid #1565C0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: var(--font-size-small);
+    }
+    
+    .empaque-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #1565C0;
+    }
+    
+    .empaque-detail {
+      display: flex;
+      margin-bottom: 3px;
+      font-size: var(--font-size-small);
+    }
+    
+    .empaque-label {
+      min-width: 140px;
+      color: var(--text-color);
+    }
+    
+    .empaque-value {
+      flex-grow: 1;
+    }
+    
+    .empaque-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .empaque-actions button {
+      padding: 8px 12px;
+      font-size: var(--font-size-small);
+    }
+    
+    .empaque-total {
+      font-weight: bold;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+    }
+    
+    /* Estilos para empaques en programación */
+    .empaque-programacion {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      border-left: 3px solid #303F9F;
+    }
+    
+    .empaque-programacion-row {
+      display: flex;
+      margin-bottom: 5px;
+    }
+    
+    .empaque-programacion-label {
+      min-width: 120px;
+      font-weight: 500;
+    }
+    
+    .empaque-programacion-input {
+      flex-grow: 1;
+    }
+    
+    .empaque-programacion-input input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .empaque-programacion-remove {
+      margin-left: 10px;
+      color: #F44336;
+      cursor: pointer;
+    }
+    
+    .add-empaque-btn {
+      margin-top: 5px;
+      background-color: #303F9F;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: var(--font-size-small);
+    }
+    
+    .add-empaque-btn:hover {
+      background-color: #283593;
+    }
+    
+    /* Nuevo estilo para el total de programación */
+    .programacion-total {
+      font-weight: bold;
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border-radius: 4px;
+      text-align: center;
+      font-size: var(--font-size-base);
+    }
+    
+    /* Estilo para los totales de programación */
+    .programacion-totales {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+    }
+    
+    .programacion-total-item {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .programacion-total-valor {
+      font-size: var(--font-size-large);
+      font-weight: bold;
+      color: #2196F3;
+    }
+
+    /* Nuevos estilos para la lista de productos en empaque */
+    .productos-empaque-container {
+      margin-top: 15px;
+    }
+
+    .producto-empaque-item {
+      background: var(--card-bg);
+      padding: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      border-left: 4px solid #F44336;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      font-size: var(--font-size-small);
+    }
+
+    .producto-empaque-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #F44336;
+    }
+
+    .producto-empaque-detail {
+      display: flex;
+      margin-bottom: 3px;
+      font-size: var(--font-size-small);
+    }
+
+    .producto-empaque-label {
+      min-width: 140px;
+      color: var(--text-color);
+    }
+
+    .producto-empaque-value {
+      flex-grow: 1;
+    }
+
+    .producto-empaque-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .producto-empaque-actions button {
+      padding: 8px 12px;
+      font-size: var(--font-size-small);
+    }
+
+    .producto-empaque-total {
+      font-weight: bold;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+    }
+    
+    /* NUEVOS ESTILOS PARA LA MEJORA DE PROGRAMACIÓN */
+    
+    /* Estilos para la tabla de programación */
+    .tabla-programacion {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: var(--font-size-small);
+    }
+
+    .tabla-programacion th {
+      background-color: #2196F3;
+      color: white;
+      padding: 8px 6px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .tabla-programacion td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .tabla-programacion tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .tabla-programacion tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    .tabla-programacion .acciones {
+      display: flex;
+      gap: 3px;
+    }
+
+    .tabla-programacion .acciones button {
+      padding: 4px 6px;
+      font-size: 11px;
+      flex: none;
+    }
+
+    .tabla-programacion .estado-proceso {
+      display: inline-block;
+      padding: 3px 6px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .tabla-programacion .estado-pendiente {
+      background-color: #FFC107;
+      color: black;
+    }
+
+    .tabla-programacion .estado-en-proceso {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .tabla-programacion .estado-completado {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    /* Estilos para los enlaces de compartir */
+    .share-links {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+    }
+
+    .share-links-title {
+      font-size: var(--font-size-base);
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--color-primario);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .share-link-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: white;
+      border-radius: 4px;
+      border: 1px solid #e9ecef;
+    }
+
+    .share-link-label {
+      min-width: 120px;
+      font-weight: 500;
+      color: #495057;
+    }
+
+    .share-link-url {
+      flex: 1;
+      font-family: monospace;
+      font-size: var(--font-size-small);
+      padding: 6px 10px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      border: 1px solid #dee2e6;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .share-link-copy {
+      margin-left: 10px;
+      padding: 6px 12px;
+      background: var(--color-info);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: var(--font-size-small);
+    }
+
+    .share-link-copy:hover {
+      opacity: 0.9;
+    }
+
+    /* Estilos para empaques en programación */
+    .empaques-programacion-container {
+      margin-top: 15px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+
+    .empaques-programacion-title {
+      font-size: var(--font-size-base);
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--color-primario);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .empaques-programacion-agregar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .empaques-programacion-agregar select, .empaques-programacion-agregar input {
+      flex: 1;
+    }
+
+    .empaques-programacion-agregar button {
+      flex: 0.3;
+      padding: 10px;
+    }
+
+    .empaques-programacion-lista {
+      margin-top: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .empaque-programacion-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      margin-bottom: 5px;
+      background: white;
+      border-radius: 4px;
+      border-left: 3px solid #2196F3;
+    }
+
+    .empaque-programacion-info {
+      flex: 1;
+    }
+
+    .empaque-programacion-acciones {
+      display: flex;
+      gap: 5px;
+    }
+
+    .empaque-programacion-acciones button {
+      padding: 5px 10px;
+      font-size: 12px;
+    }
+
+    .empaque-programacion-total {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+      font-weight: bold;
+      text-align: right;
+    }
+
+    /* Estilos para botón desplegable */
+    .toggle-button {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    .toggle-button::after {
+      content: '\f078';
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 15px;
+      transition: transform 0.3s;
+    }
+
+    .toggle-button.collapsed::after {
+      transform: rotate(-90deg);
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+
+    .collapsible-content.expanded {
+      max-height: 500px;
+    }
+
+    .btn-tv {
+      background: #303F9F;
+      margin-top: 15px;
+      width: 100%;
+      padding: 15px;
+      font-size: var(--font-size-large);
+    }
+
+    .btn-tv-empaque {
+      background: #303F9F;
+      margin-top: 15px;
+      width: 100%;
+      padding: 15px;
+      font-size: var(--font-size-large);
+    }
+    
+    .btn-tv-madre {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
+      color: #1a237e;
+      margin-top: 15px;
+      width: 100%;
+      padding: 15px;
+      font-size: var(--font-size-large);
+      font-weight: 800;
+      border: none;
+    }
+    
+    .btn-tv-madre:hover {
+      background: linear-gradient(135deg, #FFC107 0%, #FF8F00 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* NUEVO ESTILO: Fecha junto al título en programación */
+    .programacion-header-con-fecha {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+    
+    .programacion-fecha {
+      font-size: var(--font-size-base);
+      color: #666;
+      font-weight: 500;
+    }
+  </style>
+  <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="app-container">
+    <div class="app-bar">
+      <button class="theme-toggle" id="theme-toggle"><i class="fas fa-moon"></i></button>
+      <div class="app-title">Proceso de Arepas</div>
+      <div style="width: 40px;"></div>
+    </div>
+    
+    <div class="content">
+      <!-- Sección 1: Cocinar Maíz -->
+      <div id="cocinar-screen" class="screen active">
+        <h2 class="section-title">1. Cocinar Maíz</h2>
+        
+        <div class="input-group">
+          <label for="lote">Número de Lote</label>
+          <input type="text" id="lote" placeholder="Generando lote..." readonly>
+        </div>
+        
+        <div class="input-group">
+          <label for="olla">Número de Olla</label>
+          <input type="number" id="olla" placeholder="Seleccionando olla..." min="1" max="9" readonly>
+          <div class="ollas-disponibles" id="ollas-disponibles"></div>
+        </div>
+        
+        <div class="button-group">
+          <button id="iniciar-coccion">
+            <i class="fas fa-play"></i> Iniciar Cocción
+          </button>
+        </div>
+        
+        <!-- Sección de ollas activas -->
+        <div class="ollas-activas-container" id="ollas-activas">
+          <h3 class="section-title">Ollas en Proceso</h3>
+          <div id="ollas-activas-lista"></div>
+        </div>
+      </div>
+      
+      <!-- Sección 2: Formado de Arepas -->
+      <div id="formado-screen" class="screen">
+        <h2 class="section-title">2. Formado de Arepas</h2>
+        
+        <div class="input-group">
+          <label for="select-olla-formado">Seleccionar Olla</label>
+          <select id="select-olla-formado">
+            <option value="">Seleccione una olla</option>
+          </select>
+        </div>
+        
+        <div class="input-group">
+          <label for="lote-formado-input">Número de Lote</label>
+          <input type="text" id="lote-formado-input" placeholder="Lote..." readonly>
+        </div>
+        
+        <div class="producto-item" id="info-olla-formado" style="display: none;">
+          <div class="time-row">
+            <div class="time-label">Lote:</div>
+            <div class="time-value" id="lote-formado"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Olla:</div>
+            <div class="time-value" id="olla-formado"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Estado:</div>
+            <div class="time-value" id="estado-formado"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Inicio Cocción:</div>
+            <div class="time-value" id="inicio-coccion-formado"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Fin Cocción:</div>
+            <div class="time-value" id="fin-coccion-formado"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Tiempo Cocción:</div>
+            <div class="time-value" id="tiempo-coccion-formado"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Inicio Formado:</div>
+            <div class="time-value" id="inicio-formado-formado"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Tiempo Formado:</div>
+            <div class="time-value" id="tiempo-formado-formado"></div>
+          </div>
+        </div>
+        
+        <!-- Sección para agregar productos -->
+        <div class="agregar-producto-form" id="agregar-producto-form" style="display: none;">
+          <h3>Agregar Producto</h3>
+          <div class="input-group">
+            <label for="producto">Tipo de Arepa</label>
+            <select id="producto">
+              <option value="">Seleccione el producto</option>
+              <option value="Chócolo x5">Chócolo x5</option>
+              <option value="Cachapa x5">Cachapa x5</option>
+              <option value="Rellena de Queso x4">Rellena de Queso x4</option>
+              <option value="Arepa con Queso x5">Arepa con Queso x5</option>
+              <option value="Pequeña x20">Pequeña x20</option>
+              <option value="Pequeña x14">Pequeña x14</option>
+              <option value="Tradicional Blanca x20">Tradicional Blanca x20</option>
+              <option value="Tradicional Amarilla x20">Tradicional Amarilla x20</option>
+              <option value="Tradicional Blanca x6">Tradicional Blanca x6</option>
+              <option value="Tradicional Blanca x10">Tradicional Blanca x10</option>
+              <option value="Rellenar x6">Rellenar x6</option>
+              <option value="Rellenar x8">Rellenar x8</option>
+              <option value="Mediana x20">Mediana x20</option>
+              <option value="Mote x5">Mote x5</option>
+              <option value="Yuca x4">Yuca x4</option>
+              <option value="Tradicional Amarilla x6">Tradicional Amarilla x6</option>
+              <option value="Moneda x90">Moneda x90</option>
+              <option value="Arecachapa x5">Arecachapa x5</option>
+              <option value="Pelada x5">Pelada x5</option>
+            </select>
+          </div>
+          
+          <div class="agregar-producto-buttons">
+            <button id="agregar-producto" class="btn-success">
+              <i class="fas fa-plus"></i> Agregar Producto
+            </button>
+            <button id="iniciar-empaque" class="btn-primary">
+              <i class="fas fa-arrow-right"></i> Iniciar Empaque
+            </button>
+          </div>
+        </div>
+        
+        <!-- Lista de productos formados -->
+        <div class="productos-formado" id="productos-formado" style="display: none;">
+          <h3>Productos para Formar</h3>
+          <div id="productos-formado-lista"></div>
+        </div>
+      </div>
+      
+      <!-- Sección 3: Área de Empaque -->
+      <div id="empaque-screen" class="screen">
+        <h2 class="section-title">3. Área de Empaque</h2>
+        
+        <div class="input-group">
+          <label for="select-olla-empaque">Seleccionar Olla</label>
+          <select id="select-olla-empaque">
+            <option value="">Seleccione una olla</option>
+          </select>
+        </div>
+        
+        <div class="input-group">
+          <label for="select-producto-empaque">Seleccionar Producto</label>
+          <select id="select-producto-empaque" disabled>
+            <option value="">Seleccione un producto</option>
+          </select>
+        </div>
+        
+        <div class="input-group">
+          <label for="tipo-empaque">Tipo de Empaque</label>
+          <select id="tipo-empaque" disabled>
+            <option value="">Seleccione tipo de empaque</option>
+          </select>
+        </div>
+        
+        <div class="input-group">
+          <label for="cantidad-empaque">Cantidad de Paquetes</label>
+          <input type="number" id="cantidad-empaque" placeholder="Ej: 50" min="1">
+        </div>
+        
+        <div class="button-group">
+          <button id="agregar-empaque" class="btn-success" disabled>
+            <i class="fas fa-plus"></i> Agregar Empaque
+          </button>
+          <button id="finalizar-producto" class="btn-warning" disabled>
+            <i class="fas fa-check"></i> Finalizar Producto
+          </button>
+        </div>
+        
+        <div class="producto-item" id="info-olla-empaque" style="display: none;">
+          <div class="time-row">
+            <div class="time-label">Lote:</div>
+            <div class="time-value" id="lote-empaque"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Olla:</div>
+            <div class="time-value" id="olla-empaque"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Estado:</div>
+            <div class="time-value" id="estado-empaque"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Inicio Cocción:</div>
+            <div class="time-value" id="inicio-coccion-empaque"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Fin Cocción:</div>
+            <div class="time-value" id="fin-coccion-empaque"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Tiempo Cocción:</div>
+            <div class="time-value" id="tiempo-coccion-empaque"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Inicio Formado:</div>
+            <div class="time-value" id="inicio-formado-empaque"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Inicio Empaque:</div>
+            <div class="time-value" id="inicio-empaque-empaque"></div>
+          </div>
+          <div class="time-row">
+            <div class="time-label">Tiempo Formado+Empaque:</div>
+            <div class="time-value" id="tiempo-formado-empaque"></div>
+          </div>
+        </div>
+        
+        <!-- Lista de productos en empaque -->
+        <div class="productos-empaque-container" id="productos-empaque-container" style="display: none;">
+          <h3>Productos para Empaquetar</h3>
+          <div id="productos-empaque-lista"></div>
+        </div>
+        
+        <!-- Lista de empaques registrados -->
+        <div id="empaques-registrados" style="display: none;">
+          <h3>Empaques Registrados</h3>
+          <div id="empaques-lista"></div>
+          
+          <div class="button-group">
+            <button id="finalizar-proceso" class="btn-danger">
+              <i class="fas fa-flag-checkered"></i> Finalizar Proceso
+            </button>
+          </div>
+        </div>
+
+        <!-- Sección de etiquetas por producto -->
+        <div id="etiquetas-container" class="etiquetas-container" style="display: none;">
+          <h3>Etiquetas por Producto</h3>
+          <div id="etiquetas-lista"></div>
+        </div>
+
+        <button id="reiniciar-ollas" class="export-btn btn-warning">
+          <i class="fas fa-sync-alt"></i> Reiniciar Ollas del Día
+        </button>
+        <button id="ver-excel" class="export-btn btn-success">
+          <i class="fas fa-table"></i> Ver Excel en Google Sheets
+        </button>
+      </div>
+      
+      <!-- Sección 4: Histórico de Producción (SOLO DÍA ACTUAL) -->
+      <div id="historico-screen" class="screen">
+        <h2 class="section-title">
+          <span>Histórico del Día</span>
+          <button id="cerrar-historico" style="background: var(--color-danger); padding: 5px 10px; font-size: var(--font-size-small);">
+            <i class="fas fa-times"></i> Cerrar
+          </button>
+        </h2>
+        
+        <div class="search-container">
+          <input type="text" id="buscar-historico" placeholder="Buscar por lote, producto, etc.">
+        </div>
+        
+        <div class="filters">
+          <select id="filter-producto" class="filter-select">
+            <option value="">Todos los productos</option>
+            <option value="Chócolo x5">Chócolo x5</option>
+            <option value="Cachapa x5">Cachapa x5</option>
+            <option value="Rellena de Queso x4">Rellena de Queso x4</option>
+            <option value="Arepa con Queso x5">Arepa con Queso x5</option>
+            <option value="Pequeña x20">Pequeña x20</option>
+            <option value="Pequeña x14">Pequeña x14</option>
+            <option value="Tradicional Blanca x20">Tradicional Blanca x20</option>
+            <option value="Tradicional Amarilla x20">Tradicional Amarilla x20</option>
+            <option value="Tradicional Blanca x6">Tradicional Blanca x6</option>
+            <option value="Tradicional Blanca x10">Tradicional Blanca x10</option>
+            <option value="Rellenar x6">Rellenar x6</option>
+            <option value="Rellenar x8">Rellenar x8</option>
+            <option value="Mediana x20">Mediana x20</option>
+            <option value="Mote x5">Mote x5</option>
+            <option value="Yuca x4">Yuca x4</option>
+            <option value="Tradicional Amarilla x6">Tradicional Amarilla x6</option>
+            <option value="Moneda x90">Moneda x90</option>
+            <option value="Arecachapa x5">Arecachapa x5</option>
+            <option value="Pelada x5">Pelada x5</option>
+          </select>
+        </div>
+        
+        <div id="historico-lista"></div>
+        
+        <div id="sin-resultados" style="text-align: center; padding: 20px; display: none;">
+          <i class="fas fa-search" style="font-size: 24px; color: #777; margin-bottom: 10px;"></i>
+          <p>No se encontraron registros para hoy</p>
+        </div>
+      </div>
+      
+      <!-- Sección 5: Programación de Producción -->
+      <div id="programacion-screen" class="screen">
+        <div class="programacion-header-con-fecha">
+          <h2 class="section-title">
+            <span><i class="fas fa-clipboard-list"></i> Programación de Producción</span>
+          </h2>
+          <div class="programacion-fecha" id="programacion-fecha"></div>
+        </div>
+        
+        <button id="cerrar-programacion" style="background: var(--color-danger); padding: 5px 10px; font-size: var(--font-size-small); margin-bottom: 15px;">
+          <i class="fas fa-times"></i> Cerrar
+        </button>
+        
+        <!-- Botón desplegable para enlaces de compartir -->
+        <button id="toggle-share-links" class="toggle-button btn-indigo">
+          <i class="fas fa-share-alt"></i> Enlaces para Compartir
+        </button>
+        
+        <div id="share-links-container" class="collapsible-content">
+          <div class="share-links">
+            <div class="share-links-title">
+              <i class="fas fa-share-alt"></i> Enlaces para Compartir
+            </div>
+            <div class="share-link-item">
+              <div class="share-link-label">Pantalla Cocinar:</div>
+              <div class="share-link-url" id="share-cocinar-url"></div>
+              <button class="share-link-copy" data-url="cocinar">Copiar</button>
+            </div>
+            <div class="share-link-item">
+              <div class="share-link-label">Pantalla Formado:</div>
+              <div class="share-link-url" id="share-formado-url"></div>
+              <button class="share-link-copy" data-url="formado">Copiar</button>
+            </div>
+            <div class="share-link-item">
+              <div class="share-link-label">Pantalla Empaque:</div>
+              <div class="share-link-url" id="share-empaque-url"></div>
+              <button class="share-link-copy" data-url="empaque">Copiar</button>
+            </div>
+            <div class="share-link-item">
+              <div class="share-link-label">Pantalla Programación:</div>
+              <div class="share-link-url" id="share-programacion-url"></div>
+              <button class="share-link-copy" data-url="programacion">Copiar</button>
+            </div>
+            <div class="share-link-item">
+              <div class="share-link-label">Pantalla TV Programación:</div>
+              <div class="share-link-url" id="share-tv-programacion-url"></div>
+              <button class="share-link-copy" data-url="tv-programacion">Copiar</button>
+            </div>
+            <div class="share-link-item">
+              <div class="share-link-label">Pantalla TV Empaque:</div>
+              <div class="share-link-url" id="share-tv-empaque-url"></div>
+              <button class="share-link-copy" data-url="tv-empaque">Copiar</button>
+            </div>
+            <!-- NUEVO ENLACE PARA TV MADRE -->
+            <div class="share-link-item">
+              <div class="share-link-label">Pantalla TV Madre:</div>
+              <div class="share-link-url" id="share-tv-madre-url"></div>
+              <button class="share-link-copy" data-url="tv-madre">Copiar</button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Selector de días de la semana -->
+        <div class="dias-programacion" id="dias-programacion">
+          <!-- Los días se generarán dinámicamente con JavaScript -->
+        </div>
+        
+        <div class="agregar-programacion-form">
+          <h3><i class="fas fa-plus"></i> Agregar Nueva Programación</h3>
+          <div class="input-group">
+            <label for="producto-programacion"><i class="fas fa-box"></i> Producto</label>
+            <select id="producto-programacion">
+              <option value="">Seleccione el producto</option>
+              <option value="Chócolo x5">Chócolo x5</option>
+              <option value="Cachapa x5">Cachapa x5</option>
+              <option value="Rellena de Queso x4">Rellena de Queso x4</option>
+              <option value="Arepa con Queso x5">Arepa con Queso x5</option>
+              <option value="Pequeña x20">Pequeña x20</option>
+              <option value="Pequeña x14">Pequeña x14</option>
+              <option value="Tradicional Blanca x20">Tradicional Blanca x20</option>
+              <option value="Tradicional Amarilla x20">Tradicional Amarilla x20</option>
+              <option value="Tradicional Blanca x6">Tradicional Blanca x6</option>
+              <option value="Tradicional Blanca x10">Tradicional Blanca x10</option>
+              <option value="Rellenar x6">Rellenar x6</option>
+              <option value="Rellenar x8">Rellenar x8</option>
+              <option value="Mediana x20">Mediana x20</option>
+              <option value="Mote x5">Mote x5</option>
+              <option value="Yuca x4">Yuca x4</option>
+              <option value="Tradicional Amarilla x6">Tradicional Amarilla x6</option>
+              <option value="Con Queso Bodegón x8">Con Queso Bodegón x8</option>
+              <option value="Moneda x90">Moneda x90</option>
+              <option value="Tradicional Blanca Bodegón x8">Tradicional Blanca Bodegón x8</option>
+              <option value="Arecachapa x5">Arecachapa x5</option>
+              <option value="Tradicional Amarilla Bodegón x8">Tradicional Amarilla Bodegón x8</option>
+              <option value="Pelada x5">Pelada x5</option>
+              <option value="Mini x20">Mini x20</option>
+              <option value="Sándwich De Maíz Dulce">Sándwich De Maíz Dulce</option>
+              <option value="Otro">Otro (Agregar manualmente)</option>
+            </select>
+          </div>
+          
+          <!-- Campo para producto personalizado -->
+          <div class="input-group" id="producto-personalizado-container" style="display: none;">
+            <label for="producto-personalizado"><i class="fas fa-box"></i> Producto Personalizado</label>
+            <input type="text" id="producto-personalizado" placeholder="Ingrese el nombre del producto">
+          </div>
+          
+          <div class="input-group">
+            <label for="molde-programacion"><i class="fas fa-tools"></i> Molde</label>
+            <select id="molde-programacion">
+              <option value="">Seleccione el molde</option>
+              <option value="Molde A">Molde A</option>
+              <option value="Molde B">Molde B</option>
+              <option value="Molde C">Molde C</option>
+              <option value="Molde D">Molde D</option>
+              <option value="Molde F">Molde F</option>
+            </select>
+          </div>
+          
+          <div class="input-group">
+            <label for="peso-programacion"><i class="fas fa-weight"></i> Peso (onzas)</label>
+            <input type="number" id="peso-programacion" placeholder="Peso en onzas" min="1" step="0.1">
+          </div>
+          
+          <!-- NUEVO CAMPO: Observación -->
+          <div class="input-group">
+            <label for="observacion-programacion"><i class="fas fa-sticky-note"></i> Observación</label>
+            <textarea id="observacion-programacion" placeholder="Observación (opcional)" rows="2"></textarea>
+          </div>
+          
+          <!-- NUEVO CAMPO: Cantidad de cajas (AHORA AUTOMÁTICO) -->
+          <div class="input-group">
+            <label for="cajas-programacion"><i class="fas fa-box"></i> Cantidad de Cajas</label>
+            <input type="number" id="cajas-programacion" placeholder="Se calculará automáticamente" min="1" readonly>
+          </div>
+          
+          <!-- NUEVA SECCIÓN: Empaques para programación -->
+          <div class="empaques-programacion-container" id="empaques-programacion-container">
+            <div class="empaques-programacion-title">
+              <i class="fas fa-box"></i> Empaques para este Producto
+            </div>
+            
+            <div class="empaques-programacion-agregar">
+              <select id="tipo-empaque-programacion">
+                <option value="">Seleccione tipo de empaque</option>
+              </select>
+              <input type="number" id="cantidad-empaque-programacion" placeholder="Cantidad" min="1">
+              <button id="agregar-empaque-programacion" class="btn-success">
+                <i class="fas fa-plus"></i> Agregar
+              </button>
+            </div>
+            
+            <div class="empaques-programacion-lista" id="empaques-programacion-lista">
+              <!-- Los empaques se cargarán aquí dinámicamente -->
+            </div>
+            
+            <div class="empaque-programacion-total" id="empaque-programacion-total">
+              Total: 0 cajas
+            </div>
+          </div>
+          
+          <div class="button-group">
+            <button id="agregar-programacion" class="btn-indigo">
+              <i class="fas fa-plus"></i> Agregar Programación
+            </button>
+            <button id="borrar-toda-programacion" class="btn-danger">
+              <i class="fas fa-trash"></i> Borrar Toda la Programación
+            </button>
+          </div>
+        </div>
+        
+        <div class="programacion-container" id="programacion-lista">
+          <h3><i class="fas fa-chart-bar"></i> Programación del <span id="dia-seleccionado-texto">Día</span></h3>
+          
+          <table class="tabla-programacion" id="tabla-programacion">
+            <thead>
+              <tr>
+                <th><i class="fas fa-box"></i> Producto</th>
+                <th><i class="fas fa-tools"></i> Molde</th>
+                <th><i class="fas fa-weight"></i> Peso (oz)</th>
+                <th><i class="fas fa-box"></i> Total de Cajas</th>
+                <th><i class="fas fa-sticky-note"></i> Observación</th>
+                <th>Empaques</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="tabla-programacion-body">
+              <!-- Las filas se llenarán dinámicamente -->
+            </tbody>
+          </table>
+          
+          <div id="sin-programacion" style="text-align: center; padding: 20px; color: #777; display: none;">
+            <i class="fas fa-clipboard-list" style="font-size: 48px; margin-bottom: 10px;"></i>
+            <p>No hay programaciones para este día</p>
+          </div>
+        </div>
+        
+        <!-- Botones para pantallas TV en programación - NUEVO BOTÓN TV MADRE -->
+        <div class="button-group">
+          <button id="abrir-tv-programacion-desde-programacion" class="btn-tv">
+            <i class="fas fa-tv"></i> Ver Programación en TV
+          </button>
+          <button id="abrir-tv-empaque-desde-programacion" class="btn-tv-empaque">
+            <i class="fas fa-tv"></i> Ver Empaque en TV
+          </button>
+          <button id="abrir-tv-madre-desde-programacion" class="btn-tv-madre">
+            <i class="fas fa-desktop"></i> Ver Producción en Vivo (TV Madre)
+          </button>
+        </div>
+      </div>
+      
+      <!-- PANTALLA TV MADRE - NUEVA PANTALLA -->
+      <div id="tv-madre-screen" class="screen">
+        <div class="tv-madre-header">
+          <h1 class="tv-madre-title">PRODUCCIÓN EN VIVO</h1>
+          <div class="tv-madre-subtitle">Control Total de Proceso de Arepas</div>
+          <div class="tv-madre-fecha-hora" id="tv-madre-fecha-hora">Cargando...</div>
+        </div>
+        <div class="tv-madre-content">
+          <!-- Estadísticas generales -->
+          <div class="tv-madre-totales" id="tv-madre-totales">
+            <!-- Los totales se cargarán dinámicamente -->
+          </div>
+          
+          <!-- Grid de información -->
+          <div class="tv-madre-grid" id="tv-madre-grid">
+            <!-- Las tarjetas se cargarán dinámicamente -->
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pantalla TV Programación -->
+      <div id="tv-programacion-screen" class="screen">
+        <div class="tv-header">
+          <div class="tv-header-contenedor">
+            <div class="tv-titulo-contenedor">
+              <h1 class="tv-title">Programación de Producción</h1>
+            </div>
+            <div class="tv-fecha" id="tv-fecha-hoy">15/11/2025</div>
+          </div>
+        </div>
+        <div class="tv-content">
+          <table class="tv-tabla-programacion" id="tv-tabla-programacion">
+            <thead>
+              <tr>
+                <th><i class="fas fa-box tv-icon"></i> Producto</th>
+                <th><i class="fas fa-tools tv-icon"></i> Molde</th>
+                <th><i class="fas fa-weight tv-icon"></i> Peso (oz)</th>
+                <th><i class="fas fa-box tv-icon"></i> Total de Cajas</th>
+              </tr>
+            </thead>
+            <tbody id="tv-tabla-programacion-body">
+              <!-- Las filas se llenarán dinámicamente -->
+            </tbody>
+          </table>
+          
+          <div id="tv-sin-programacion" class="tv-sin-programacion" style="display: none;">
+            <i class="fas fa-clipboard-list" style="font-size: 72px; margin-bottom: 20px;"></i>
+            <div>No hay programación para hoy</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Pantalla TV Empaque -->
+      <div id="tv-empaque-screen" class="screen">
+        <div class="tv-header">
+          <div class="tv-header-contenedor">
+            <div class="tv-titulo-contenedor">
+              <h1 class="tv-title">Programación de Empaque</h1>
+            </div>
+            <div class="tv-fecha" id="tv-empaque-fecha-hoy">15/11/2025</div>
+          </div>
+        </div>
+        <div class="tv-content">
+          <table id="tv-tabla-empaque">
+            <thead>
+              <tr>
+                <th><i class="fas fa-box tv-icon"></i> Producto</th>
+                <th><i class="fas fa-box tv-icon"></i> Tipo de Empaque</th>
+                <th><i class="fas fa-weight tv-icon"></i> Peso del Paquete</th>
+                <th><i class="fas fa-box tv-icon"></i> Total de Cajas</th>
+              </tr>
+            </thead>
+            <tbody id="tv-tabla-empaque-body">
+              <!-- Las filas se llenarán dinámicamente -->
+            </tbody>
+          </table>
+          
+          <div id="tv-sin-empaque" class="tv-sin-programacion" style="display: none;">
+            <i class="fas fa-box-open" style="font-size: 72px; margin-bottom: 20px;"></i>
+            <div>No hay programación de empaque para hoy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="nav-bar">
+      <div class="nav-item active" data-screen="cocinar">
+        <div class="nav-icon">🌽</div>
+        <div>Cocinar</div>
+      </div>
+      <div class="nav-item" data-screen="formado">
+        <div class="nav-icon">👐</div>
+        <div>Formado</div>
+      </div>
+      <div class="nav-item" data-screen="empaque">
+        <div class="nav-icon">📦</div>
+        <div>Empaque</div>
+      </div>
+      <div class="nav-item" data-screen="programacion">
+        <div class="nav-icon">📅</div>
+        <div>Programación</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para selección de impresión -->
+  <div id="print-modal" class="print-modal" style="display: none;">
+    <div class="print-modal-content">
+      <div class="print-modal-title">Seleccionar método de impresión</div>
+      <div class="print-options">
+        <button id="print-direct" class="print-option-btn direct">
+          <i class="fas fa-print"></i> Imprimir directamente
+        </button>
+        <button id="print-pdf" class="print-option-btn pdf">
+          <i class="fas fa-file-pdf"></i> Generar PDF para imprimir
+        </button>
+        <button id="print-cancel" class="print-option-btn cancel">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 1. CONFIGURACIÓN DE SUPABASE
+    const SUPABASE_URL = 'https://pdelcqknvnnoqohagkoa.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBkZWxjcWtudm5ub3FvaGFna29hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU1OTUwOTEsImV4cCI6MjA4MTE3MTA5MX0.EXQo1VhEzgbwtwoZFD0YKOs2BlqdB8TTP_z1Y0arDHA';
+
+    // Inicializa Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 2. VARIABLES GLOBALES
+    let registros = [];
+    let inicioFormado, finFormado;
+    let inicioCoccion, finCoccion;
+    let inicioEmpaque, finEmpaque;
+    let currentLote = '';
+    let currentOlla = '';
+    let ollasUsadasHoy = [];
+    let procesosActivos = {};
+    let currentProcessId = null;
+    let ultimoLoteUsado = 'J1999';
+    let siguienteOlla = 1;
+    let productosFormado = [];
+    let productoSeleccionadoEmpaque = null;
+    let currentPrintData = null;
+    let currentDay = new Date().toISOString().split('T')[0];
+    let empaquesRegistrados = [];
+    let programacion = [];
+    let programacionProcesos = {}; // Para rastrear tiempos de producción de programación
+    let empaquesProgramacion = []; // Para almacenar los empaques en la programación
+    let diaProgramacionActual = '';
+    let diasSemana = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+    let diaSeleccionadoProgramacion = new Date().toISOString().split('T')[0];
+    let editarProgramacionId = null;
+    let tvMadreActualizacionInterval = null; // Intervalo para actualizar pantalla TV Madre
+
+    // Configuración de la impresora
+    const printerConfig = {
+      ip: '192.168.118.1',
+      port: 9100,
+      timeout: 5000
+    };
+
+    // Tipos de empaque por producto - ACTUALIZADOS CON BOLSA BROWAR MEAT
+    const tiposEmpaque = {
+      "Tradicional Blanca x20": [
+        "Bolsa la Mejor",
+        "Bolsa Bodegon",
+        "Bolsa Transparente no Logo",
+        "Al vacío Bolsa la Mejor",
+        "Al vacío Sticker la Mejor",
+        "Al vacío Food Fair",
+        "Al vacío Browar Meat",
+        "Bolsa Browar Meat",
+        "Sin stickers",
+        "Al vacío, Sin Sticker",
+        "Al vacío, Con Sticker"
+      ],
+      "Tradicional Amarilla x20": [
+        "Bolsa la Mejor",
+        "Bolsa Bodegon",
+        "Bolsa Transparente no Logo",
+        "Al vacío Bolsa la Mejor",
+        "Al vacío Sticker la Mejor",
+        "Al vacío Food Fair",
+        "Al vacío Browar Meat",
+        "Bolsa Browar Meat",
+        "Sin stickers",
+        "Al vacío, Sin Sticker",
+        "Al vacío, Con Sticker"
+      ],
+      "Chócolo x5": [
+        "Bolsa Transparente",
+        "Bolsa al Vacío",
+        "Sin Sticker",
+        "Con sticker",
+        "Menos Azúcar",
+        "Al vacío, Sin Sticker",
+        "Al vacío, Con Sticker"
+      ],
+      "Rellena de Queso x4": [
+        "Bolsa Transparente",
+        "Bolsa al Vacío",
+        "Sin Sticker",
+        "Con sticker la Mejor",
+        "Al vacío, Sin Sticker",
+        "Al vacío, Con Sticker"
+      ],
+      "Mini x20": [
+        "Bolsa Transparente",
+        "Bolsa al Vacío",
+        "Sin Sticker",
+        "Con sticker la Mejor",
+        "Al vacío, Sin Sticker",
+        "Al vacío, Con Sticker"
+      ],
+      "Rellenar x8": [
+        "Bolsa Transparente",
+        "Bolsa al Vacío",
+        "Sin Sticker",
+        "Con sticker la Mejor",
+        "Al vacío, Sin Sticker",
+        "Al vacío, Con Sticker",
+        "Sin Sal"
+      ],
+      "default": [
+        "Bolsa Transparente",
+        "Bolsa al Vacío",
+        "Sin Sticker",
+        "Con sticker la Mejor",
+        "Al vacío, Sin Sticker",
+        "Al vacío, Con Sticker"
+      ]
+    };
+
+    // PESOS ACTUALIZADOS - CORREGIDOS CON LOS DATOS PROPORCIONADOS
+    const pesosProductos = {
+      "Chócolo x5": "5.5",
+      "Cachapa x5": "6",
+      "Rellena de Queso x4": "5.2",
+      "Arepa con Queso x5": "4.8",
+      "Con Queso Bodegón x8": "4.3",
+      "Pequeña x20": "2.6",
+      "Pequeña x14": "2.6",
+      "Tradicional Blanca x20": "4.4",
+      "Tradicional Amarilla x20": "4.4",
+      "Tradicional Blanca x6": "4.8",
+      "Tradicional Blanca x10": "5.4",
+      "Rellenar x6": "5.2",
+      "Rellenar x8": "5.8",
+      "Mediana x20": "3.5",
+      "Mote x5": "5.3",
+      "Yuca x4": "3.71",
+      "Tradicional Amarilla x6": "",
+      "Moneda x90": "",
+      "Arecachapa x5": "",
+      "Pelada x5": "",
+      "Mini x20": "",
+      "Sándwich De Maíz Dulce": "",
+      "Tradicional Blanca Bodegón x8": "",
+      "Tradicional Amarilla Bodegón x8": "",
+      "Otro": ""
+    };
+
+    // PESOS PARA PANTALLA TV EMPAQUE - CON LAS UNIDADES ESPECÍFICAS
+    const pesosEmpaqueTV = {
+      "Chócolo x5": "600 g",
+      "Cachapa x5": "765 g",
+      "Rellena de Queso x4": "560 g",
+      "Arepa con Queso x5": "425 g",
+      "Con Queso Bodegón x8": "",
+      "Pequeña x20": "3.0 lb",
+      "Pequeña x14": "936 g",
+      "Tradicional Blanca x20": "4.5 lb",
+      "Tradicional Amarilla x20": "4.5 lb",
+      "Tradicional Blanca x6": "740 g",
+      "Tradicional Blanca x10": "3.13 lb",
+      "Rellenar x6": "850 g",
+      "Rellenar x8": "2.50 lb",
+      "Mediana x20": "3.68 lb",
+      "Mote x5": "510 g",
+      "Yuca x4": "425 g",
+      "Tradicional Amarilla x6": "",
+      "Moneda x90": "",
+      "Arecachapa x5": "",
+      "Pelada x5": "",
+      "Mini x20": "",
+      "Sándwich De Maíz Dulce": "",
+      "Tradicional Blanca Bodegón x8": "",
+      "Tradicional Amarilla Bodegón x8": "",
+      "Otro": ""
+    };
+
+    // 3. FUNCIONES AUXILIARES
+    function mostrarNotificacion(mensaje, tipo = 'success') {
+      const notification = document.createElement('div');
+      notification.className = `notification ${tipo}`;
+      notification.innerHTML = `
+        <i class="fas fa-${tipo === 'error' ? 'exclamation-circle' : tipo === 'warning' ? 'exclamation-triangle' : 'check-circle'}"></i>
+        ${mensaje}
+      `;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.remove(), 3500);
+    }
+
+    // CORREGIDO: Formato de fecha con mes primero
+    function formatDateTime(date) {
+      if (!date) return "--:--";
+      const dia = date.getDate().toString().padStart(2, '0');
+      const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+      const año = date.getFullYear();
+      const horas = date.getHours().toString().padStart(2, '0');
+      const minutos = date.getMinutes().toString().padStart(2, '0');
+      const segundos = date.getSeconds().toString().padStart(2, '0');
+      return `${mes}/${dia}/${año} ${horas}:${minutos}:${segundos}`;
+    }
+
+    // CORREGIDO: Formato de fecha con mes primero
+    function formatDate(date) {
+      if (!date) return "--/--/----";
+      const dia = date.getDate().toString().padStart(2, '0');
+      const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+      const año = date.getFullYear();
+      return `${mes}/${dia}/${año}`;
+    }
+
+    function formatDateISO(date) {
+      if (!date) return "";
+      const año = date.getFullYear();
+      const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+      const dia = date.getDate().toString().padStart(2, '0');
+      return `${año}-${mes}-${dia}`;
+    }
+
+    function calcularDuracion(inicio, fin) {
+      if (!inicio || !fin) return "--";
+      
+      const diferencia = Math.floor((fin - inicio) / 1000); // Diferencia en segundos
+      const horas = Math.floor(diferencia / 3600);
+      const minutos = Math.floor((diferencia % 3600) / 60);
+      const segundos = diferencia % 60;
+      
+      let resultado = '';
+      if (horas > 0) {
+        resultado += `${horas}h `;
+      }
+      if (minutos > 0 || horas === 0) {
+        resultado += `${minutos}m `;
+      }
+      if (segundos > 0 || (horas === 0 && minutos === 0)) {
+        resultado += `${segundos}s`;
+      }
+      
+      return resultado.trim() || "0s";
+    }
+
+    function calcularDuracionHorasMinutos(inicio, fin) {
+      if (!inicio || !fin) return "--";
+      
+      const diferencia = Math.floor((fin - inicio) / 1000 / 60); // Diferencia en minutos
+      const horas = Math.floor(diferencia / 60);
+      const minutos = diferencia % 60;
+      
+      if (isNaN(horas) || isNaN(minutos)) return "--";
+      
+      return `${horas}h ${minutos}m`;
+    }
+
+    function generarSiguienteLote(loteActual) {
+      if (!loteActual || !loteActual.match(/^[A-Za-z]\d+$/)) return 'J2000';
+      const prefijo = loteActual.substring(0, 1);
+      const numero = parseInt(loteActual.substring(1)) + 1;
+      return prefijo + numero;
+    }
+
+    function actualizarOllasUsadas(ollasUsadas = []) {
+      const ollasInfo = document.getElementById('ollas-disponibles');
+      if (!ollasInfo) return;
+      
+      ollasInfo.innerHTML = '';
+      const titulo = document.createElement('div');
+      titulo.textContent = 'Ollas usadas hoy:';
+      titulo.style.fontWeight = 'bold';
+      titulo.style.marginBottom = '5px';
+      ollasInfo.appendChild(titulo);
+      
+      const container = document.createElement('div');
+      container.style.display = 'flex';
+      container.style.flexWrap = 'wrap';
+      container.style.gap = '5px';
+      
+      for (let i = 1; i <= 9; i++) {
+        const span = document.createElement('span');
+        span.textContent = i;
+        span.style.padding = '2px 8px';
+        span.style.borderRadius = '10px';
+        
+        if (ollasUsadas.includes(i)) {
+          span.classList.add('olla-usada');
+          span.style.backgroundColor = '#ffebee';
+        } else {
+          span.classList.add('olla-disponible');
+          span.style.backgroundColor = '#e8f5e9';
+          span.style.cursor = 'pointer';
+          span.addEventListener('click', () => {
+            document.getElementById('olla').value = i;
+            mostrarNotificacion(`Olla ${i} seleccionada`);
+          });
+        }
+        container.appendChild(span);
+      }
+      ollasInfo.appendChild(container);
+      
+      actualizarSiguienteOlla();
+    }
+    
+    function actualizarSiguienteOlla() {
+      for (let i = 1; i <= 9; i++) {
+        if (!ollasUsadasHoy.includes(i)) {
+          siguienteOlla = i;
+          document.getElementById('olla').value = siguienteOlla;
+          return;
+        }
+      }
+      
+      siguienteOlla = 0;
+      document.getElementById('olla').value = '';
+      mostrarNotificacion("Todas las ollas han sido usadas hoy", "warning");
+    }
+
+    function actualizarOllasActivas() {
+      const listaOllas = document.getElementById('ollas-activas-lista');
+      listaOllas.innerHTML = '';
+      
+      const ollasActivas = Object.values(procesosActivos).filter(p => p.estado !== 'completado');
+      
+      if (ollasActivas.length === 0) {
+        listaOllas.innerHTML = '<div style="text-align: center; padding: 10px; color: #666;">No hay ollas activas</div>';
+        return;
+      }
+      
+      ollasActivas.forEach(proceso => {
+        const ollaItem = document.createElement('div');
+        ollaItem.className = 'olla-activa';
+        
+        let estado = '';
+        if (proceso.estado === 'coccion') {
+          estado = `<span class="status-badge status-coccion">En Cocción</span>`;
+        } else if (proceso.estado === 'formado') {
+          estado = `<span class="status-badge status-formado">En Formado</span>`;
+        } else if (proceso.estado === 'empaque') {
+          estado = `<span class="status-badge status-empaque">En Empaque</span>`;
+        }
+        
+        ollaItem.innerHTML = `
+          <div class="olla-header">
+            <div>Olla ${proceso.olla}</div>
+            <div>Lote: ${proceso.lote}</div>
+          </div>
+          <div class="olla-detail">
+            <div class="olla-label">Estado:</div>
+            <div class="olla-value">${estado}</div>
+          </div>
+          <div class="olla-detail">
+            <div class="olla-label">Inicio Cocción:</div>
+            <div class="olla-value">${proceso.inicioCoccion || '--'}</div>
+          </div>
+          ${proceso.finCoccion ? `
+          <div class="olla-detail">
+            <div class="olla-label">Fin Cocción:</div>
+            <div class="olla-value">${proceso.finCoccion || '--'}</div>
+          </div>
+          <div class="olla-detail">
+            <div class="olla-label">Tiempo Cocción:</div>
+            <div class="olla-value">${calcularDuracion(new Date(proceso.inicioCoccion), new Date(proceso.finCoccion)) || '--'}</div>
+          </div>` : ''}
+          <div class="olla-actions">
+            ${proceso.estado === 'coccion' ? `
+            <button class="btn-success finalizar-coccion-btn" data-id="${proceso.id}">
+              <i class="fas fa-stop"></i> Finalizar Cocción
+            </button>
+            ` : ''}
+            ${proceso.estado === 'formado' || proceso.estado === 'empaque' ? `
+            <button class="btn-warning ver-productos-btn" data-id="${proceso.id}">
+              <i class="fas fa-eye"></i> Ver Productos
+            </button>
+            ` : ''}
+          </div>
+        `;
+        
+        listaOllas.appendChild(ollaItem);
+      });
+      
+      // Asignar eventos a los botones dinámicos
+      document.querySelectorAll('.finalizar-coccion-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const procesoId = this.getAttribute('data-id');
+          finalizarCoccionDesdeLista(procesoId);
+        });
+      });
+      
+      document.querySelectorAll('.ver-productos-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const procesoId = this.getAttribute('data-id');
+          verProductosDesdeLista(procesoId);
+        });
+      });
+    }
+
+    async function finalizarCoccionDesdeLista(procesoId) {
+      if (!procesoId) return;
+      
+      const proceso = procesosActivos[procesoId];
+      if (!proceso) return;
+      
+      currentProcessId = procesoId;
+      currentLote = proceso.lote;
+      currentOlla = proceso.olla;
+      
+      finCoccion = new Date();
+      const finCoccionStr = formatDateTime(finCoccion);
+      const duracionCoccionStr = calcularDuracion(new Date(proceso.inicioCoccion), finCoccion);
+      
+      try {
+        // Actualizar proceso en Supabase
+        const { error } = await supabase
+          .from('procesos')
+          .update({
+            estado: 'formado',
+            finCoccion: finCoccionStr,
+            duracionCoccion: duracionCoccionStr,
+            inicioFormado: finCoccionStr,
+            productos: [] // Inicializar array vacío para productos
+          })
+          .eq('id', procesoId);
+        
+        if (error) throw error;
+        
+        mostrarNotificacion(`Cocción finalizada para olla ${proceso.olla}`);
+        
+        // Verificar si este proceso está relacionado con una programación
+        await verificarYActualizarProgramacion(proceso);
+        
+        currentLote = generarSiguienteLote(currentLote);
+        document.getElementById('lote').value = currentLote;
+        
+        // Guardar último lote en config
+        await supabase
+          .from('config')
+          .update({ valor: currentLote })
+          .eq('clave', 'ultimoLote');
+          
+        actualizarSiguienteOlla();
+      } catch (error) {
+        console.error("Error al finalizar cocción:", error);
+        mostrarNotificacion("Error al finalizar la cocción", "error");
+      }
+    }
+
+    async function verificarYActualizarProgramacion(proceso) {
+      try {
+        // Buscar si este proceso está relacionado con una programación
+        const { data: programacionData, error } = await supabase
+          .from('programacion')
+          .select('*')
+          .eq('dia', diaProgramacionActual);
+        
+        if (error) throw error;
+        
+        for (const programacionItem of programacionData) {
+          // Verificar si el producto del proceso coincide con algún producto programado
+          if (proceso.productos && proceso.productos.some(p => p.nombre === programacionItem.producto)) {
+            // Verificar si ya existe un proceso de programación para este producto
+            const { data: procesosData } = await supabase
+              .from('programacion_procesos')
+              .select('*')
+              .eq('id_programacion', programacionItem.id)
+              .is('fin_proceso', null);
+            
+            if (!procesosData || procesosData.length === 0) {
+              // Crear nuevo proceso de programación
+              const nuevoProceso = {
+                id_programacion: programacionItem.id,
+                producto: programacionItem.producto,
+                inicio_proceso: formatDateTime(new Date()),
+                created_at: new Date().toISOString()
+              };
+              
+              const { error: insertError } = await supabase
+                .from('programacion_procesos')
+                .insert([nuevoProceso]);
+                
+              if (!insertError) {
+                mostrarNotificacion(`Programación para ${programacionItem.producto} marcada como en proceso`);
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error al actualizar programación:", error);
+      }
+    }
+
+    function verProductosDesdeLista(procesoId) {
+      if (!procesoId) return;
+      
+      const proceso = procesosActivos[procesoId];
+      if (!proceso) return;
+      
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.querySelector('[data-screen="formado"]').classList.add('active');
+      document.getElementById('formado-screen').classList.add('active');
+      document.querySelector('.app-bar').style.backgroundColor = '#FF9800';
+      
+      document.getElementById('select-olla-formado').value = procesoId;
+      const event = new Event('change');
+      document.getElementById('select-olla-formado').dispatchEvent(event);
+    }
+
+    function actualizarSelectOllas() {
+      const selectFormado = document.getElementById('select-olla-formado');
+      const selectEmpaque = document.getElementById('select-olla-empaque');
+      
+      selectFormado.innerHTML = '<option value="">Seleccione una olla</option>';
+      selectEmpaque.innerHTML = '<option value="">Seleccione una olla</option>';
+      
+      const ollasFormado = Object.values(procesosActivos).filter(p => p.estado === 'formado' || p.estado === 'empaque');
+      const ollasEmpaque = Object.values(procesosActivos).filter(p => p.estado === 'empaque');
+      
+      ollasFormado.forEach(proceso => {
+        const option = document.createElement('option');
+        option.value = proceso.id;
+        option.textContent = `Olla ${proceso.olla} - Lote ${proceso.lote}`;
+        selectFormado.appendChild(option);
+      });
+      
+      ollasEmpaque.forEach(proceso => {
+        const option = document.createElement('option');
+        option.value = proceso.id;
+        option.textContent = `Olla ${proceso.olla} - Lote ${proceso.lote}`;
+        selectEmpaque.appendChild(option);
+      });
+    }
+
+    function cargarProductosFormado(procesoId) {
+      const proceso = procesosActivos[procesoId];
+      if (!proceso) return;
+      
+      productosFormado = proceso.productos || [];
+      
+      const listaProductos = document.getElementById('productos-formado-lista');
+      listaProductos.innerHTML = '';
+      
+      if (productosFormado.length === 0) {
+        listaProductos.innerHTML = '<div style="text-align: center; padding: 10px; color: #666;">No hay productos registrados</div>';
+        return;
+      }
+      
+      productosFormado.forEach((producto, index) => {
+        const productoItem = document.createElement('div');
+        productoItem.className = 'producto-formado-item';
+        productoItem.innerHTML = `
+          <div class="producto-formado-header">
+            <div>${producto.nombre}</div>
+          </div>
+          <div class="producto-formado-detail">
+            <div class="producto-formado-label">Agregado:</div>
+            <div class="producto-formado-value">${producto.fecha}</div>
+          </div>
+        `;
+        listaProductos.appendChild(productoItem);
+      });
+      
+      // Actualizar información de tiempos
+      document.getElementById('inicio-coccion-formado').textContent = proceso.inicioCoccion || '--';
+      document.getElementById('fin-coccion-formado').textContent = proceso.finCoccion || '--';
+      document.getElementById('tiempo-coccion-formado').textContent = proceso.duracionCoccion || '--';
+      document.getElementById('inicio-formado-formado').textContent = proceso.inicioFormado || '--';
+      
+      // Calcular tiempo de formado
+      if (proceso.inicioFormado) {
+        const inicioFormadoDate = new Date(proceso.inicioFormado);
+        const ahora = new Date();
+        const tiempoFormado = calcularDuracion(inicioFormadoDate, ahora);
+        document.getElementById('tiempo-formado-formado').textContent = tiempoFormado;
+      } else {
+        document.getElementById('tiempo-formado-formado').textContent = '--';
+      }
+    }
+
+    function cargarProductosEmpaque(procesoId) {
+      const proceso = procesosActivos[procesoId];
+      if (!proceso) return;
+      
+      const productos = proceso.productos || [];
+      const empaques = proceso.empaques || [];
+      
+      const listaProductos = document.getElementById('productos-empaque-lista');
+      listaProductos.innerHTML = '';
+      
+      if (productos.length === 0) {
+        listaProductos.innerHTML = '<div style="text-align: center; padding: 10px; color: #666;">No hay productos para empaquetar</div>';
+        return;
+      }
+      
+      productos.forEach(producto => {
+        // Calcular total de empaques para este producto
+        const totalEmpaques = empaques
+          .filter(e => e.producto === producto.nombre)
+          .reduce((sum, e) => sum + parseInt(e.cantidad), 0);
+        
+        const productoItem = document.createElement('div');
+        productoItem.className = 'producto-empaque-item';
+        productoItem.innerHTML = `
+          <div class="producto-empaque-header">
+            <div>${producto.nombre}</div>
+            <div>Total: ${totalEmpaques}</div>
+          </div>
+          <div class="producto-empaque-detail">
+            <div class="producto-empaque-label">Agregado:</div>
+            <div class="producto-empaque-value">${producto.fecha}</div>
+          </div>
+          <div class="producto-empaque-actions">
+            <button class="btn-success seleccionar-producto-btn" data-producto="${producto.nombre}">
+              <i class="fas fa-check"></i> Seleccionar
+            </button>
+          </div>
+        `;
+        listaProductos.appendChild(productoItem);
+      });
+      
+      // Asignar eventos a los botones de selección
+      document.querySelectorAll('.seleccionar-producto-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const producto = this.getAttribute('data-producto');
+          productoSeleccionadoEmpaque = producto;
+          
+          // Actualizar el select de producto
+          document.getElementById('select-producto-empaque').value = producto;
+          
+          // Disparar evento change para actualizar tipos de empaque
+          const event = new Event('change');
+          document.getElementById('select-producto-empaque').dispatchEvent(event);
+          
+          mostrarNotificacion(`Producto ${producto} seleccionado para empaque`);
+        });
+      });
+    }
+
+    function cargarEmpaques(procesoId) {
+      const proceso = procesosActivos[procesoId];
+      if (!proceso) return;
+      
+      empaquesRegistrados = proceso.empaques || [];
+      
+      const listaEmpaques = document.getElementById('empaques-lista');
+      listaEmpaques.innerHTML = '';
+      
+      if (empaquesRegistrados.length === 0) {
+        listaEmpaques.innerHTML = '<div style="text-align: center; padding: 10px; color: #666;">No hay empaques registrados</div>';
+        return;
+      }
+      
+      // Agrupar empaques por producto
+      const empaquesPorProducto = {};
+      empaquesRegistrados.forEach(empaque => {
+        if (!empaquesPorProducto[empaque.producto]) {
+          empaquesPorProducto[empaque.producto] = [];
+        }
+        empaquesPorProducto[empaque.producto].push(empaque);
+      });
+      
+      // Mostrar empaques agrupados
+      Object.keys(empaquesPorProducto).forEach(producto => {
+        const empaquesProducto = empaquesPorProducto[producto];
+        const totalProducto = empaquesProducto.reduce((sum, e) => sum + parseInt(e.cantidad), 0);
+        
+        const productoItem = document.createElement('div');
+        productoItem.className = 'empaque-item';
+        
+        let empaquesHTML = '';
+        empaquesProducto.forEach(empaque => {
+          empaquesHTML += `
+            <div class="empaque-detail">
+              <div class="empaque-label">${empaque.producto} (${empaque.tipoEmpaque}):</div>
+              <div>${empaque.cantidad || '0'} paquetes</div>
+            </div>
+          `;
+        });
+        
+        productoItem.innerHTML = `
+          <div class="empaque-header">
+            <div>${producto}</div>
+            <div>Total: ${totalProducto}</div>
+          </div>
+          ${empaquesHTML}
+        `;
+        
+        listaEmpaques.appendChild(productoItem);
+      });
+    }
+
+    function actualizarInfoEmpaque(proceso) {
+      document.getElementById('inicio-coccion-empaque').textContent = proceso.inicioCoccion || '--';
+      document.getElementById('fin-coccion-empaque').textContent = proceso.finCoccion || '--';
+      document.getElementById('tiempo-coccion-empaque').textContent = proceso.duracionCoccion || '--';
+      document.getElementById('inicio-formado-empaque').textContent = proceso.inicioFormado || '--';
+      document.getElementById('inicio-empaque-empaque').textContent = proceso.inicioEmpaque || '--';
+      
+      // Calcular tiempo de formado + empaque
+      if (proceso.inicioFormado) {
+        const inicioFormadoDate = new Date(proceso.inicioFormado);
+        const ahora = new Date();
+        const tiempoFormadoEmpaque = calcularDuracion(inicioFormadoDate, ahora);
+        document.getElementById('tiempo-formado-empaque').textContent = tiempoFormadoEmpaque;
+      } else {
+        document.getElementById('tiempo-formado-empaque').textContent = '--';
+      }
+    }
+
+    function actualizarSelectProductosEmpaque(proceso) {
+      const selectProducto = document.getElementById('select-producto-empaque');
+      selectProducto.innerHTML = '<option value="">Seleccione un producto</option>';
+      
+      if (!proceso.productos || proceso.productos.length === 0) {
+        selectProducto.disabled = true;
+        return;
+      }
+      
+      proceso.productos.forEach(producto => {
+        const option = document.createElement('option');
+        option.value = producto.nombre;
+        option.textContent = producto.nombre;
+        selectProducto.appendChild(option);
+      });
+      
+      selectProducto.disabled = false;
+    }
+
+    function actualizarTiposEmpaque(producto) {
+      const tipoEmpaqueSelect = document.getElementById('tipo-empaque');
+      tipoEmpaqueSelect.innerHTML = '<option value="">Seleccione tipo de empaque</option>';
+      
+      const empaques = tiposEmpaque[producto] || tiposEmpaque.default;
+      
+      empaques.forEach(tipo => {
+        const option = document.createElement('option');
+        option.value = tipo;
+        option.textContent = tipo;
+        tipoEmpaqueSelect.appendChild(option);
+      });
+      
+      tipoEmpaqueSelect.disabled = false;
+      document.getElementById('agregar-empaque').disabled = false;
+      document.getElementById('finalizar-producto').disabled = false;
+    }
+
+    function generarEtiquetasProductos(proceso) {
+      const etiquetasLista = document.getElementById('etiquetas-lista');
+      etiquetasLista.innerHTML = '';
+      
+      if (!proceso.productos || proceso.productos.length === 0) {
+        document.getElementById('etiquetas-container').style.display = 'none';
+        return;
+      }
+      
+      proceso.productos.forEach(producto => {
+        const fechaElaboracion = new Date();
+        const fechaVencimiento = new Date();
+        fechaVencimiento.setDate(fechaElaboracion.getDate() + 90);
+        
+        const etiquetaItem = document.createElement('div');
+        etiquetaItem.className = 'etiqueta-producto';
+        etiquetaItem.innerHTML = `
+          <div class="etiqueta-producto-header">
+            <h3 style="margin: 0;">${producto.nombre}</h3>
+            <button class="btn-success imprimir-etiqueta-btn" data-producto="${producto.nombre}" data-lote="${proceso.lote}" style="padding: 5px 10px; font-size: var(--font-size-small);">
+              <i class="fas fa-print"></i> Imprimir
+            </button>
+          </div>
+          <div class="etiqueta">
+            <h3>${producto.nombre}</h3>
+            <p><strong>Lote:</strong> ${proceso.lote}</p>
+            <p><strong>Fecha Elaboración:</strong> ${formatDate(fechaElaboracion)}</p>
+            <p><strong>Fecha Vencimiento:</strong> ${formatDate(fechaVencimiento)}</p>
+          </div>
+        `;
+        etiquetasLista.appendChild(etiquetaItem);
+      });
+      
+      document.getElementById('etiquetas-container').style.display = 'block';
+      
+      // Asignar eventos a los botones de impresión
+      document.querySelectorAll('.imprimir-etiqueta-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const producto = this.getAttribute('data-producto');
+          const lote = this.getAttribute('data-lote');
+          mostrarDialogoImpresion(producto, lote);
+        });
+      });
+    }
+
+    function mostrarDialogoImpresion(producto, lote) {
+      const fechaElaboracion = formatDate(new Date());
+      const fechaVencimiento = formatDate(new Date(new Date().setDate(new Date().getDate() + 90)));
+      
+      const labelContent = `
+        N
+        q812
+        Q203,26
+        S4
+        D7
+        ZT
+        A40,20,0,4,1,1,N,"${producto}"
+        A40,60,0,3,1,1,N,"Lote: ${lote}"
+        A40,100,0,3,1,1,N,"Elab: ${fechaElaboracion}"
+        A40,140,0,3,1,1,N,"Venc: ${fechaVencimiento}"
+        P1
+      `;
+      
+      currentPrintData = {
+        producto,
+        lote,
+        fechaElaboracion,
+        fechaVencimiento,
+        labelContent
+      };
+      
+      document.getElementById('print-modal').style.display = 'flex';
+    }
+
+    function imprimirDirectamente() {
+      if (!currentPrintData) return;
+      
+      const { labelContent } = currentPrintData;
+      
+      const printBtn = document.getElementById('print-direct');
+      const originalText = printBtn.innerHTML;
+      printBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando a impresora...';
+      printBtn.disabled = true;
+      
+      const form = document.createElement('form');
+      form.style.display = 'none';
+      form.method = 'POST';
+      form.action = `http://${printerConfig.ip}:${printerConfig.port}`;
+      form.enctype = 'text/plain';
+      
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'data';
+      input.value = labelContent;
+      
+      form.appendChild(input);
+      document.body.appendChild(form);
+      
+      setTimeout(() => {
+        form.submit();
+        
+        setTimeout(() => {
+          printBtn.innerHTML = originalText;
+          printBtn.disabled = false;
+          form.remove();
+          document.getElementById('print-modal').style.display = 'none';
+          mostrarNotificacion("Etiqueta enviada a la impresora");
+        }, 3000);
+      }, 500);
+    }
+
+    function generarPDF() {
+      if (!currentPrintData) return;
+      
+      const { producto, lote, fechaElaboracion, fechaVencimiento } = currentPrintData;
+      
+      const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Etiqueta ${producto}</title>
+          <style>
+            body { font-family: Arial, sans-serif; }
+            .etiqueta { 
+              border: 2px solid #333; 
+              padding: 10px; 
+              border-radius: 5px; 
+              width: 300px; 
+              margin: 0 auto;
+              text-align: center;
+            }
+            h3 { 
+              margin: 0; 
+              padding-bottom: 5px; 
+              border-bottom: 1px solid #333; 
+              font-size: var(--font-size-large); 
+              color: #333; 
+            }
+            p { 
+              margin: 5px 0; 
+              font-size: var(--font-size-small); 
+              color: #555; 
+              text-align: left;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="etiqueta">
+            <h3>${producto}</h3>
+            <p><strong>Lote:</strong> ${lote}</p>
+            <p><strong>Fecha Elaboración:</strong> ${fechaElaboracion}</p>
+            <p><strong>Fecha Vencimiento:</strong> ${fechaVencimiento}</p>
+          </div>
+        </body>
+        </html>
+      `;
+      
+      const win = window.open('', '_blank');
+      win.document.write(printContent);
+      win.document.close();
+      
+      document.getElementById('print-modal').style.display = 'none';
+      
+      setTimeout(() => {
+        win.print();
+        win.close();
+      }, 500);
+    }
+
+    async function generarReporteDiario() {
+      const hoy = new Date().toISOString().split('T')[0];
+      
+      if (hoy !== currentDay) {
+        currentDay = hoy;
+        await reiniciarParaNuevoDia();
+      }
+      
+      try {
+        // Obtener registros del día
+        const { data: registrosHoy, error: errorRegistros } = await supabase
+          .from('registros')
+          .select('*')
+          .eq('fecha', hoy);
+        
+        if (errorRegistros) throw errorRegistros;
+        
+        // Obtener procesos del día
+        const hoyInicio = new Date();
+        hoyInicio.setHours(0, 0, 0, 0);
+        
+        const { data: procesosHoy, error: errorProcesos } = await supabase
+          .from('procesos')
+          .select('*')
+          .gte('created_at', hoyInicio.toISOString());
+        
+        if (errorProcesos) throw errorProcesos;
+        
+        const todosLosRegistros = [...(registrosHoy || []), ...(procesosHoy || [])];
+        
+        if (todosLosRegistros.length === 0) {
+          document.getElementById('reporte-contenido').innerHTML = '<p style="text-align: center; padding: 20px;">No hay registros de producción para hoy</p>';
+          return;
+        }
+        
+        const productos = {};
+        let totalGeneral = 0;
+        let totalFinalizados = 0;
+        let totalEnProceso = 0;
+        let tiempoTotalMinutos = 0;
+        let procesosCompletados = 0;
+        
+        todosLosRegistros.forEach(reg => {
+          if (reg.empaques && reg.empaques.length > 0) {
+            reg.empaques.forEach(e => {
+              if (!productos[e.producto]) {
+                productos[e.producto] = {
+                  cantidad: 0,
+                  cantidadFinalizada: 0,
+                  cantidadEnProceso: 0,
+                  lotes: new Set(),
+                  tiempos: [],
+                  estados: [],
+                  empaques: {}
+                };
+              }
+              
+              if (reg.finProceso) {
+                productos[e.producto].cantidad += parseInt(e.cantidad) || 0;
+                productos[e.producto].cantidadFinalizada += parseInt(e.cantidad) || 0;
+                totalFinalizados += parseInt(e.cantidad) || 0;
+                
+                if (!productos[e.producto].empaques[e.tipoEmpaque]) {
+                  productos[e.producto].empaques[e.tipoEmpaque] = 0;
+                }
+                productos[e.producto].empaques[e.tipoEmpaque] += parseInt(e.cantidad) || 0;
+                
+                if (reg.inicioFormado && reg.finProceso) {
+                  const inicio = new Date(reg.inicioFormado);
+                  const fin = new Date(reg.finProceso);
+                  const duracion = calcularDuracion(inicio, fin);
+                  productos[e.producto].tiempos.push(duracion);
+                  tiempoTotalMinutos += duracion;
+                  procesosCompletados++;
+                }
+              } else {
+                productos[e.producto].cantidadEnProceso += parseInt(e.cantidad) || 0;
+                totalEnProceso += parseInt(e.cantidad) || 0;
+                
+                let estado = '';
+                if (reg.estado === 'coccion') estado = 'En Cocción';
+                else if (reg.estado === 'formado') estado = 'En Formado';
+                else if (reg.estado === 'empaque') estado = 'En Empaque';
+                
+                if (estado) {
+                  productos[e.producto].estados.push(estado);
+                }
+              }
+              
+              productos[e.producto].lotes.add(reg.lote);
+              totalGeneral += parseInt(e.cantidad) || 0;
+            });
+          }
+        });
+        
+        let reporteHTML = '';
+        
+        const productosOrdenados = Object.keys(productos).sort((a, b) => 
+          (productos[b].cantidadFinalizada + productos[b].cantidadEnProceso) - 
+          (productos[a].cantidadFinalizada + productos[a].cantidadEnProceso)
+        );
+        
+        productosOrdenados.forEach(nombre => {
+          const prod = productos[nombre];
+          
+          let tiempoPromedio = "--";
+          if (prod.tiempos.length > 0) {
+            tiempoPromedio = prod.tiempos[0]; // Ya está en formato horas y minutos
+          }
+          
+          let estadoGeneral = '';
+          if (prod.cantidadFinalizada > 0 && prod.cantidadEnProceso > 0) {
+            estadoGeneral = `<span class="status-badge" style="background-color: #673AB7;">Parcial (${prod.cantidadFinalizada} finalizados, ${prod.cantidadEnProceso} en proceso)</span>`;
+          } else if (prod.cantidadFinalizada > 0) {
+            estadoGeneral = `<span class="status-badge status-completado">Completado (${prod.cantidadFinalizada})</span>`;
+          } else if (prod.cantidadEnProceso > 0) {
+            const estadosUnicos = [...new Set(prod.estados)];
+            estadoGeneral = estadosUnicos.map(e => {
+              const count = prod.estados.filter(est => est === e).length;
+              let color = '';
+              if (e === 'En Cocción') color = 'status-coccion';
+              else if (e === 'En Formado') color = 'status-formado';
+              else if (e === 'En Empaque') color = 'status-empaque';
+              return `<span class="status-badge ${color}">${e} (${count})</span>`;
+            }).join(' ');
+          }
+          
+          let empaquesHTML = '';
+          Object.keys(prod.empaques).forEach(tipo => {
+            empaquesHTML += `
+              <div class="reporte-detail">
+                <div class="reporte-label">${tipo}:</div>
+                <div class="reporte-value">${prod.empaques[tipo]} paquetes</div>
+              </div>
+            `;
+          });
+          
+          reporteHTML += `
+            <div class="reporte-item">
+              <div class="reporte-header">
+                <div>${nombre}</div>
+                <div>${prod.cantidadFinalizada + prod.cantidadEnProceso} paquetes</div>
+              </div>
+              <div class="reporte-detail">
+                <div class="reporte-label">Lote(s):</div>
+                <div class="reporte-value">${Array.from(prod.lotes).join(', ')}</div>
+              </div>
+              ${empaquesHTML}
+              <div class="reporte-detail">
+                <div class="reporte-label">Tiempo promedio:</div>
+                <div class="reporte-value">${tiempoPromedio}</div>
+              </div>
+              <div class="reporte-detail">
+                <div class="reporte-label">Estado:</div>
+                <div class="reporte-value">${estadoGeneral}</div>
+              </div>
+            </div>
+          `;
+          document.getElementById('reporte-contenido').innerHTML = reporteHTML;
+        });
+        
+        // Calcular tiempo promedio total
+        let tiempoPromedioTotal = "--";
+        if (procesosCompletados > 0) {
+          tiempoPromedioTotal = calcularDuracionHorasMinutos(new Date(hoyInicio), new Date());
+        }
+        
+        reporteHTML += `
+          <div class="reporte-total">
+            <div>Total producido hoy: ${totalFinalizados} paquetes</div>
+            <div>En proceso: ${totalEnProceso} paquetes</div>
+            <div>Total general: ${totalFinalizados + totalEnProceso} paquetes</div>
+            <div>Tiempo promedio total: ${tiempoPromedioTotal}</div>
+          </div>
+        `;
+        
+        document.getElementById('reporte-contenido').innerHTML = reporteHTML;
+      } catch (error) {
+        console.error("Error al generar reporte:", error);
+        mostrarNotificacion("Error al generar el reporte", "error");
+      }
+    }
+
+    async function reiniciarParaNuevoDia() {
+      try {
+        // Obtener ollas usadas hoy
+        const hoy = new Date().toISOString().split('T')[0];
+        const { data: ollasData } = await supabase
+          .from('config')
+          .select('valor')
+          .eq('clave', `ollas_${hoy}`)
+          .single();
+        
+        ollasUsadasHoy = ollasData ? JSON.parse(ollasData.valor) : [];
+        actualizarOllasUsadas(ollasUsadasHoy);
+        
+        // Eliminar solo los procesos de cocción completados
+        const { data: procesosData } = await supabase
+          .from('procesos')
+          .select('*');
+        
+        if (procesosData) {
+          for (const proceso of procesosData) {
+            // Eliminar solo procesos completados o de cocción que no están en formado/empaque
+            if (proceso.estado === 'completado' || (proceso.estado === 'coccion' && !proceso.finCoccion)) {
+              await supabase
+                .from('procesos')
+                .delete()
+                .eq('id', proceso.id);
+            }
+          }
+        }
+        
+        // Eliminar la programación del día anterior
+        const hoyFecha = new Date();
+        const diaSemana = hoyFecha.getDay() - 1; // Ajustar para que lunes=0
+        const diaAnterior = diaSemana === -1 ? 'sabado' : diasSemana[diaSemana - 1];
+        
+        await supabase
+          .from('programacion')
+          .delete()
+          .eq('dia', diaAnterior);
+        
+        mostrarNotificacion("¡Nuevo día! Ollas y procesos reiniciados.");
+        actualizarSiguienteOlla();
+      } catch (error) {
+        console.error("Error al reiniciar para nuevo día:", error);
+      }
+    }
+
+    async function cargarConfiguracionInicial() {
+      try {
+        // Cargar último lote
+        const { data: configData } = await supabase
+          .from('config')
+          .select('valor')
+          .eq('clave', 'ultimoLote')
+          .single();
+        
+        ultimoLoteUsado = configData ? configData.valor : 'J1999';
+        currentLote = generarSiguienteLote(ultimoLoteUsado);
+        document.getElementById('lote').value = currentLote;
+        
+        // Cargar ollas usadas hoy
+        const hoy = new Date().toISOString().split('T')[0];
+        currentDay = hoy;
+        
+        const { data: ollasData } = await supabase
+          .from('config')
+          .select('valor')
+          .eq('clave', `ollas_${hoy}`)
+          .single();
+        
+        ollasUsadasHoy = ollasData ? JSON.parse(ollasData.valor) : [];
+        actualizarOllasUsadas(ollasUsadasHoy);
+        
+        // Suscribirse a cambios en procesos
+        const procesosChannel = supabase
+          .channel('procesos-changes')
+          .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'procesos' }, 
+            async () => {
+              await cargarProcesosActivos();
+            }
+          )
+          .subscribe();
+        
+        // Cargar procesos iniciales
+        await cargarProcesosActivos();
+        
+        // Determinar el día actual y configurar la programación
+        const hoyFecha = new Date();
+        const diaSemana = hoyFecha.getDay() - 1; // Ajustar para que lunes=0
+        diaProgramacionActual = diaSemana === -1 ? 'sabado' : diasSemana[diaSemana];
+        
+        // Activar el día correspondiente en la interfaz
+        document.querySelectorAll('.dia-programacion').forEach(dia => {
+          dia.classList.remove('active');
+          if (dia.getAttribute('data-dia') === diaProgramacionActual) {
+            dia.classList.add('active');
+          }
+        });
+        
+        await cargarProgramacion();
+        
+        // Suscribirse a cambios en programación
+        const programacionChannel = supabase
+          .channel('programacion-changes')
+          .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'programacion' }, 
+            async () => {
+              await cargarProgramacion();
+            }
+          )
+          .subscribe();
+        
+        // Suscribirse a cambios en procesos de programación
+        const programacionProcesosChannel = supabase
+          .channel('programacion-procesos-changes')
+          .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'programacion_procesos' }, 
+            async () => {
+              await cargarProgramacionProcesos();
+            }
+          )
+          .subscribe();
+        
+        // Cargar procesos de programación
+        await cargarProgramacionProcesos();
+        
+        // Generar días de la semana para programación
+        generarDiasSemana();
+        
+        // Actualizar URLs de compartir
+        actualizarURLsCompartir();
+        
+        // Actualizar fecha en la pantalla de programación
+        actualizarFechaProgramacion();
+        
+        // Configurar actualización automática de fecha y hora en TV Madre
+        setInterval(actualizarFechaHoraTVMadre, 1000);
+        
+      } catch (error) {
+        console.error("Error en configuración inicial:", error);
+        mostrarNotificacion("Error al cargar la configuración inicial", "error");
+      }
+    }
+
+    async function cargarProcesosActivos() {
+      try {
+        const { data, error } = await supabase
+          .from('procesos')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        procesosActivos = {};
+        if (data) {
+          data.forEach(proceso => {
+            procesosActivos[proceso.id] = { ...proceso };
+          });
+        }
+        
+        actualizarOllasActivas();
+        actualizarSelectOllas();
+      } catch (error) {
+        console.error("Error al cargar procesos:", error);
+      }
+    }
+
+    async function cargarProgramacionProcesos() {
+      try {
+        const { data, error } = await supabase
+          .from('programacion_procesos')
+          .select('*');
+        
+        if (error) throw error;
+        
+        programacionProcesos = {};
+        if (data) {
+          data.forEach(proceso => {
+            programacionProcesos[proceso.id] = { ...proceso };
+          });
+        }
+      } catch (error) {
+        console.error("Error al cargar procesos de programación:", error);
+      }
+    }
+
+    function actualizarFechaProgramacion() {
+      const fechaElement = document.getElementById('programacion-fecha');
+      if (fechaElement) {
+        fechaElement.textContent = formatDate(new Date());
+      }
+    }
+
+    async function cargarHistorico() {
+      const hoy = new Date().toISOString().split('T')[0];
+      
+      if (hoy !== currentDay) {
+        currentDay = hoy;
+        await reiniciarParaNuevoDia();
+      }
+      
+      const busqueda = document.getElementById('buscar-historico').value.toLowerCase();
+      const filtroProducto = document.getElementById('filter-producto').value;
+      
+      try {
+        const { data, error } = await supabase
+          .from('registros')
+          .select('*')
+          .eq('fecha', hoy)
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        registros = data || [];
+        
+        const registrosFiltrados = registros.filter(reg => {
+          const cumpleBusqueda = !busqueda || 
+            reg.lote.toLowerCase().includes(busqueda) || 
+            (reg.empaques && reg.empaques.some(e => e.producto.toLowerCase().includes(busqueda))) ||
+            reg.olla.toString().includes(busqueda);
+          
+          const cumpleProducto = !filtroProducto || 
+            (reg.empaques && reg.empaques.some(e => e.producto === filtroProducto));
+          
+          return cumpleBusqueda && cumpleProducto;
+        });
+        
+        const lista = document.getElementById('historico-lista');
+        lista.innerHTML = '';
+        
+        if (registrosFiltrados.length === 0) {
+          document.getElementById('sin-resultados').style.display = 'block';
+          return;
+        }
+        
+        document.getElementById('sin-resultados').style.display = 'none';
+        
+        registrosFiltrados.forEach(reg => {
+          const item = document.createElement('div');
+          item.className = 'registro-item';
+          
+          let empaquesHTML = '';
+          if (reg.empaques && reg.empaques.length > 0) {
+            empaquesHTML = reg.empaques.map(e => `
+              <div class="registro-detail">
+                <div class="registro-label">${e.producto} (${e.tipoEmpaque}):</div>
+                <div>${e.cantidad || '0'} paquetes</div>
+              </div>
+            `).join('');
+          }
+          
+          item.innerHTML = `
+            <div class="registro-header">
+              <div>Lote: ${reg.lote}</div>
+              <div>Olla: ${reg.olla}</div>
+            </div>
+            <div class="registro-detail">
+              <div class="registro-label">Inicio Cocción:</div>
+              <div>${reg.inicioCoccion}</div>
+            </div>
+            <div class="registro-detail">
+              <div class="registro-label">Fin Cocción:</div>
+              <div>${reg.finCoccion}</div>
+            </div>
+            <div class="registro-detail">
+              <div class="registro-label">Tiempo Cocción:</div>
+              <div>${reg.duracionCoccion || '--'}</div>
+            </div>
+            <div class="registro-detail">
+              <div class="registro-label">Inicio Formado:</div>
+              <div>${reg.inicioFormado}</div>
+            </div>
+            <div class="registro-detail">
+              <div class="registro-label">Inicio Empaque:</div>
+              <div>${reg.inicioEmpaque}</div>
+            </div>
+            <div class="registro-detail">
+              <div class="registro-label">Finalización:</div>
+              <div>${reg.finProceso}</div>
+            </div>
+            <div class="registro-detail">
+              <div class="registro-label">Tiempo Total:</div>
+              <div>${reg.duracionTotal || '--'}</div>
+            </div>
+            ${empaquesHTML}
+            <div class="registro-detail">
+              <div class="registro-label">Estado:</div>
+              <div><span class="status-badge status-completado">Completado</span></div>
+            </div>
+          `;
+          lista.appendChild(item);
+        });
+      } catch (error) {
+        console.error("Error al cargar histórico:", error);
+        mostrarNotificacion("Error al cargar el histórico", "error");
+      }
+    }
+
+    // FUNCIONES NUEVAS PARA PROGRAMACIÓN SEMANAL
+    // CORREGIDO: Ahora siempre están desbloqueados el día actual y el siguiente
+    function generarDiasSemana() {
+      const hoy = new Date();
+      const diasContainer = document.getElementById('dias-programacion');
+      diasContainer.innerHTML = '';
+      
+      const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+      const diasSemanaCodigo = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+      
+      // Encontrar el índice del día actual (sábado = 5)
+      const diaSemanaActual = hoy.getDay(); // 0 = domingo, 1 = lunes, ..., 6 = sábado
+      const indiceActual = diaSemanaActual === 0 ? 5 : diaSemanaActual - 1; // Ajustar para que lunes=0, sábado=5
+      
+      // Generar los días de la semana
+      for (let i = 0; i < 6; i++) {
+        const fecha = new Date();
+        
+        // Calcular la fecha para este día de la semana
+        // Si hoy es sábado (índice 5), el lunes será +2 días
+        let diferencia;
+        if (indiceActual === 5 && i === 0) { // Si hoy es sábado y estamos generando lunes
+          diferencia = 2;
+        } else if (indiceActual === 5 && i === 1) { // Si hoy es sábado y estamos generando martes
+          diferencia = 3;
+        } else if (indiceActual === 5 && i === 2) { // Si hoy es sábado y estamos generando miércoles
+          diferencia = 4;
+        } else if (indiceActual === 5 && i === 3) { // Si hoy es sábado y estamos generando jueves
+          diferencia = 5;
+        } else if (indiceActual === 5 && i === 4) { // Si hoy es sábado y estamos generando viernes
+          diferencia = 6;
+        } else if (indiceActual === 5 && i === 5) { // Si hoy es sábado y estamos generando sábado
+          diferencia = 7;
+        } else {
+          // Para otros días, calcular normalmente
+          diferencia = i - indiceActual;
+          if (diferencia < 0) diferencia += 7;
+        }
+        
+        fecha.setDate(hoy.getDate() + diferencia);
+        
+        const diaItem = document.createElement('div');
+        const diaCodigo = diasSemanaCodigo[i];
+        
+        // CORRECCIÓN: Siempre desbloquear el día actual y el siguiente
+        // El lunes debe estar desbloqueado desde el sábado
+        const estaDesbloqueado = i >= indiceActual || (indiceActual === 5 && i === 0); // Si hoy es sábado, lunes también está desbloqueado
+        
+        diaItem.className = `dia-programacion ${i === indiceActual ? 'active' : ''} ${!estaDesbloqueado ? 'bloqueado' : ''}`;
+        diaItem.setAttribute('data-fecha', formatDateISO(fecha));
+        diaItem.setAttribute('data-dia', diaCodigo);
+        
+        diaItem.innerHTML = `
+          <div class="dia-nombre">${diasSemana[i]}</div>
+          <div class="dia-fecha">${formatDate(fecha)}</div>
+        `;
+        
+        if (estaDesbloqueado) {
+          diaItem.addEventListener('click', function() {
+            document.querySelectorAll('.dia-programacion').forEach(d => d.classList.remove('active'));
+            this.classList.add('active');
+            diaSeleccionadoProgramacion = this.getAttribute('data-fecha');
+            document.getElementById('dia-seleccionado-texto').textContent = this.querySelector('.dia-nombre').textContent;
+            cargarProgramacionPorDia(diaSeleccionadoProgramacion);
+          });
+        }
+        
+        diasContainer.appendChild(diaItem);
+      }
+    }
+
+    async function cargarProgramacionPorDia(fecha) {
+      try {
+        const { data, error } = await supabase
+          .from('programacion')
+          .select('*')
+          .eq('fecha', fecha)
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        programacion = data || [];
+        actualizarListaProgramacion();
+      } catch (error) {
+        console.error("Error al cargar programación por día:", error);
+        mostrarNotificacion("Error al cargar la programación", "error");
+      }
+    }
+
+    async function cargarProgramacion() {
+      await cargarProgramacionPorDia(diaSeleccionadoProgramacion);
+    }
+
+    function actualizarListaProgramacion() {
+      const tablaBody = document.getElementById('tabla-programacion-body');
+      tablaBody.innerHTML = '';
+      
+      if (programacion.length === 0) {
+        document.getElementById('tabla-programacion').style.display = 'none';
+        document.getElementById('sin-programacion').style.display = 'block';
+        return;
+      }
+      
+      document.getElementById('tabla-programacion').style.display = 'table';
+      document.getElementById('sin-programacion').style.display = 'none';
+      
+      programacion.forEach(item => {
+        const procesoProgramacion = Object.values(programacionProcesos).find(p => 
+          p.id_programacion === item.id
+        );
+        
+        let estado = '';
+        let claseEstado = '';
+        
+        if (procesoProgramacion) {
+          if (procesoProgramacion.fin_proceso) {
+            estado = 'Completado';
+            claseEstado = 'estado-completado';
+          } else {
+            estado = 'En Proceso';
+            claseEstado = 'estado-en-proceso';
+          }
+        } else {
+          estado = 'Pendiente';
+          claseEstado = 'estado-pendiente';
+        }
+        
+        // Calcular total de cajas programadas (suma de todos los empaques)
+        let totalCajasProgramadas = 0;
+        if (item.empaques && item.empaques.length > 0) {
+          totalCajasProgramadas = item.empaques.reduce((sum, e) => sum + parseInt(e.cantidad), 0);
+        } else {
+          totalCajasProgramadas = item.cajas || 0;
+        }
+        
+        // Mostrar empaques programados
+        let empaquesHTML = '';
+        if (item.empaques && item.empaques.length > 0) {
+          empaquesHTML = item.empaques.map(e => `${e.tipo}: ${e.cantidad}`).join(', ');
+        } else {
+          empaquesHTML = 'Sin empaques específicos';
+        }
+        
+        const fila = document.createElement('tr');
+        fila.innerHTML = `
+          <td>${item.producto}</td>
+          <td>${item.molde || '--'}</td>
+          <td>${item.peso || '--'} oz</td>
+          <td>${totalCajasProgramadas}</td>
+          <td>${item.observacion || '--'}</td>
+          <td>${empaquesHTML}</td>
+          <td><span class="estado-proceso ${claseEstado}">${estado}</span></td>
+          <td class="acciones">
+            <button class="btn-primary editar-programacion-btn" data-id="${item.id}">
+              <i class="fas fa-edit"></i> Editar
+            </button>
+            <button class="btn-danger eliminar-programacion-btn" data-id="${item.id}">
+              <i class="fas fa-trash"></i> Eliminar
+            </button>
+          </td>
+        `;
+        
+        tablaBody.appendChild(fila);
+        
+        // Agregar eventos a los botones
+        fila.querySelector('.editar-programacion-btn').addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          abrirModalEditar(id);
+        });
+        
+        fila.querySelector('.eliminar-programacion-btn').addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          eliminarProgramacion(id);
+        });
+      });
+    }
+
+    async function eliminarProgramacion(id) {
+      if (!confirm("¿Está seguro que desea eliminar esta programación?")) {
+        return;
+      }
+      
+      try {
+        const { error } = await supabase
+          .from('programacion')
+          .delete()
+          .eq('id', id);
+        
+        if (error) throw error;
+        
+        mostrarNotificacion("Programación eliminada");
+      } catch (error) {
+        console.error("Error al eliminar programación:", error);
+        mostrarNotificacion("Error al eliminar la programación", "error");
+      }
+    }
+
+    function abrirModalEditar(id) {
+      const item = programacion.find(p => p.id === id);
+      if (!item) return;
+      
+      editarProgramacionId = id;
+      
+      // Llenar el formulario con los datos actuales
+      document.getElementById('editar-producto').value = item.producto;
+      document.getElementById('editar-molde').value = item.molde;
+      document.getElementById('editar-peso').value = item.peso;
+      document.getElementById('editar-cajas').value = item.cajas || '';
+      document.getElementById('editar-observacion').value = item.observacion || '';
+      
+      // Cargar empaques en el formulario de edición
+      if (item.empaques) {
+        cargarEmpaquesEnFormulario('empaques-programacion-lista-editar', item.empaques);
+      } else {
+        limpiarListaEmpaquesProgramacion('empaques-programacion-lista-editar');
+      }
+      
+      // Actualizar opciones de empaque según el producto
+      generarOpcionesEmpaques(item.producto, 'tipo-empaque-programacion-editar');
+      
+      // Mostrar el modal
+      document.getElementById('modal-editar').style.display = 'flex';
+    }
+
+    function cerrarModalEditar() {
+      document.getElementById('modal-editar').style.display = 'none';
+      editarProgramacionId = null;
+    }
+
+    async function guardarEdicionProgramacion() {
+      const producto = document.getElementById('editar-producto').value;
+      const molde = document.getElementById('editar-molde').value;
+      const peso = document.getElementById('editar-peso').value;
+      const cajas = document.getElementById('editar-cajas').value;
+      const observacion = document.getElementById('editar-observacion').value;
+      
+      if (!producto) {
+        mostrarNotificacion("Seleccione un producto", "error");
+        return;
+      }
+      
+      if (!molde) {
+        mostrarNotificacion("Seleccione un molde", "error");
+        return;
+      }
+      
+      if (!peso || peso < 1) {
+        mostrarNotificacion("Ingrese un peso válido", "error");
+        return;
+      }
+      
+      if (!cajas || cajas < 1) {
+        mostrarNotificacion("Ingrese una cantidad de cajas válida", "error");
+        return;
+      }
+      
+      const empaques = obtenerEmpaquesDelFormulario('empaques-programacion-lista-editar');
+      
+      const actualizacion = {
+        producto,
+        molde,
+        peso: parseFloat(peso),
+        cajas: parseInt(cajas),
+        observacion,
+        empaques: empaques,
+        fecha: diaSeleccionadoProgramacion,
+        updated_at: new Date().toISOString()
+      };
+      
+      try {
+        const { error } = await supabase
+          .from('programacion')
+          .update(actualizacion)
+          .eq('id', editarProgramacionId);
+        
+        if (error) throw error;
+        
+        mostrarNotificacion("Programación actualizada");
+        cerrarModalEditar();
+      } catch (error) {
+        console.error("Error al actualizar programación:", error);
+        mostrarNotificacion("Error al actualizar la programación", "error");
+      }
+    }
+
+    async function borrarTodaProgramacion() {
+      if (!confirm("¿Está seguro que desea borrar TODA la programación del día seleccionado?")) {
+        return;
+      }
+      
+      try {
+        const { error } = await supabase
+          .from('programacion')
+          .delete()
+          .eq('fecha', diaSeleccionadoProgramacion);
+        
+        if (error) throw error;
+        
+        mostrarNotificacion("Toda la programación ha sido eliminada");
+      } catch (error) {
+        console.error("Error al eliminar toda la programación:", error);
+        mostrarNotificacion("Error al eliminar la programación", "error");
+      }
+    }
+
+    async function agregarProgramacion() {
+      let producto = document.getElementById('producto-programacion').value;
+      const molde = document.getElementById('molde-programacion').value;
+      const peso = document.getElementById('peso-programacion').value;
+      const cajas = document.getElementById('cajas-programacion').value;
+      const observacion = document.getElementById('observacion-programacion').value;
+      
+      // Si se seleccionó "Otro", usar el valor del campo personalizado
+      if (producto === "Otro") {
+        producto = document.getElementById('producto-personalizado').value;
+        if (!producto) {
+          mostrarNotificacion("Ingrese el nombre del producto personalizado", "error");
+          return;
+        }
+      }
+      
+      if (!producto) {
+        mostrarNotificacion("Seleccione un producto", "error");
+        return;
+      }
+      
+      if (!molde) {
+        mostrarNotificacion("Seleccione un molde", "error");
+        return;
+      }
+      
+      if (!peso || peso < 1) {
+        mostrarNotificacion("Ingrese un peso válido", "error");
+        return;
+      }
+      
+      if (!cajas || cajas < 1) {
+        mostrarNotificacion("Ingrese una cantidad de cajas válida", "error");
+        return;
+      }
+      
+      try {
+        // Verificar si ya existe programación para este producto en este día
+        const { data: existingData, error: checkError } = await supabase
+          .from('programacion')
+          .select('id')
+          .eq('fecha', diaSeleccionadoProgramacion)
+          .eq('producto', producto);
+        
+        if (checkError) throw checkError;
+        
+        if (existingData && existingData.length > 0) {
+          mostrarNotificacion("Ya existe una programación para este producto en este día", "warning");
+          return;
+        }
+        
+        const empaques = obtenerEmpaquesDelFormulario('empaques-programacion-lista');
+        
+        const nuevaProgramacion = {
+          producto,
+          molde,
+          peso: parseFloat(peso),
+          cajas: parseInt(cajas),
+          observacion,
+          empaques: empaques,
+          fecha: diaSeleccionadoProgramacion,
+          dia: diaProgramacionActual,
+          created_at: new Date().toISOString()
+        };
+        
+        const { error } = await supabase
+          .from('programacion')
+          .insert([nuevaProgramacion]);
+        
+        if (error) throw error;
+        
+        mostrarNotificacion(`Programación agregada para ${producto}`);
+        document.getElementById('producto-programacion').value = '';
+        document.getElementById('producto-personalizado').value = '';
+        document.getElementById('producto-personalizado-container').style.display = 'none';
+        document.getElementById('molde-programacion').value = '';
+        document.getElementById('peso-programacion').value = '';
+        document.getElementById('cajas-programacion').value = '';
+        document.getElementById('observacion-programacion').value = '';
+        limpiarListaEmpaquesProgramacion('empaques-programacion-lista');
+      } catch (error) {
+        console.error("Error al agregar programación:", error);
+        mostrarNotificacion("Error al agregar la programación", "error");
+      }
+    }
+
+    // NUEVAS FUNCIONES PARA GESTIÓN DE URLS
+    function actualizarURLsCompartir() {
+      const baseURL = window.location.href.split('?')[0];
+      
+      document.getElementById('share-cocinar-url').textContent = `${baseURL}?screen=cocinar`;
+      document.getElementById('share-formado-url').textContent = `${baseURL}?screen=formado`;
+      document.getElementById('share-empaque-url').textContent = `${baseURL}?screen=empaque`;
+      document.getElementById('share-programacion-url').textContent = `${baseURL}?screen=programacion`;
+      document.getElementById('share-tv-programacion-url').textContent = `${baseURL}?screen=tv-programacion`;
+      document.getElementById('share-tv-empaque-url').textContent = `${baseURL}?screen=tv-empaque`;
+      document.getElementById('share-tv-madre-url').textContent = `${baseURL}?screen=tv-madre`;
+    }
+
+    // FUNCIONES AUXILIARES PARA EMPAQUES EN PROGRAMACIÓN
+    function generarOpcionesEmpaques(producto, selectId) {
+      const select = document.getElementById(selectId);
+      select.innerHTML = '<option value="">Seleccione tipo de empaque</option>';
+      
+      const empaques = tiposEmpaque[producto] || tiposEmpaque.default;
+      
+      empaques.forEach(tipo => {
+        const option = document.createElement('option');
+        option.value = tipo;
+        option.textContent = tipo;
+        select.appendChild(option);
+      });
+    }
+
+    function agregarEmpaqueALista(listaId, tipo, cantidad) {
+      const lista = document.getElementById(listaId);
+      const empaqueItem = document.createElement('div');
+      empaqueItem.className = 'empaque-programacion-item';
+      empaqueItem.innerHTML = `
+        <div class="empaque-programacion-info">
+          ${tipo}: ${cantidad} cajas
+        </div>
+        <div class="empaque-programacion-acciones">
+          <button class="btn-danger eliminar-empaque-btn">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      `;
+      
+      lista.appendChild(empaqueItem);
+      
+      // Agregar evento para eliminar empaque
+      empaqueItem.querySelector('.eliminar-empaque-btn').addEventListener('click', function() {
+        empaqueItem.remove();
+        calcularTotalProgramacion(listaId);
+      });
+      
+      calcularTotalProgramacion(listaId);
+    }
+
+    function calcularTotalProgramacion(listaId) {
+      const lista = document.getElementById(listaId);
+      let total = 0;
+      
+      lista.querySelectorAll('.empaque-programacion-item').forEach(item => {
+        const texto = item.querySelector('.empaque-programacion-info').textContent;
+        const cantidad = parseInt(texto.match(/: (\d+)/)[1]);
+        total += cantidad;
+      });
+      
+      document.getElementById('cajas-programacion').value = total;
+      document.getElementById('empaque-programacion-total').textContent = `Total: ${total} cajas`;
+    }
+
+    function limpiarListaEmpaquesProgramacion(listaId) {
+      const lista = document.getElementById(listaId);
+      lista.innerHTML = '';
+      calcularTotalProgramacion(listaId);
+    }
+
+    function cargarEmpaquesEnFormulario(listaId, empaques) {
+      const lista = document.getElementById(listaId);
+      lista.innerHTML = '';
+      
+      empaques.forEach(empaque => {
+        agregarEmpaqueALista(listaId, empaque.tipo, empaque.cantidad);
+      });
+    }
+
+    function obtenerEmpaquesDelFormulario(listaId) {
+      const lista = document.getElementById(listaId);
+      const empaques = [];
+      
+      lista.querySelectorAll('.empaque-programacion-item').forEach(item => {
+        const texto = item.querySelector('.empaque-programacion-info').textContent;
+        const [tipo, cantidad] = texto.split(': ');
+        empaques.push({
+          tipo: tipo.trim(),
+          cantidad: parseInt(cantidad)
+        });
+      });
+      
+      return empaques;
+    }
+
+    // NUEVAS FUNCIONES PARA PANTALLAS TV
+    function abrirPantallaTVProgramacion() {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById('tv-programacion-screen').classList.add('active');
+      document.querySelector('.app-bar').style.backgroundColor = '#303F9F';
+      
+      cargarContenidoTVProgramacion();
+    }
+
+    function abrirPantallaTVEmpaque() {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById('tv-empaque-screen').classList.add('active');
+      document.querySelector('.app-bar').style.backgroundColor = '#303F9F';
+      
+      cargarContenidoTVEmpaque();
+    }
+
+    // NUEVA FUNCIÓN: Abrir pantalla TV Madre
+    function abrirPantallaTVMadre() {
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+      document.getElementById('tv-madre-screen').classList.add('active');
+      document.querySelector('.app-bar').style.backgroundColor = '#1a237e';
+      
+      // Iniciar actualización automática de la pantalla TV Madre
+      iniciarActualizacionTVMadre();
+    }
+
+    // NUEVA FUNCIÓN: Iniciar actualización automática de TV Madre
+    function iniciarActualizacionTVMadre() {
+      // Actualizar inmediatamente
+      actualizarPantallaTVMadre();
+      
+      // Configurar intervalo de actualización (cada 10 segundos)
+      if (tvMadreActualizacionInterval) {
+        clearInterval(tvMadreActualizacionInterval);
+      }
+      
+      tvMadreActualizacionInterval = setInterval(actualizarPantallaTVMadre, 10000);
+    }
+
+    // NUEVA FUNCIÓN: Actualizar fecha y hora en TV Madre
+    function actualizarFechaHoraTVMadre() {
+      const fechaHoraElement = document.getElementById('tv-madre-fecha-hora');
+      if (fechaHoraElement) {
+        const ahora = new Date();
+        const fecha = formatDate(ahora);
+        const horas = ahora.getHours().toString().padStart(2, '0');
+        const minutos = ahora.getMinutes().toString().padStart(2, '0');
+        const segundos = ahora.getSeconds().toString().padStart(2, '0');
+        
+        fechaHoraElement.textContent = `${fecha} ${horas}:${minutos}:${segundos}`;
+      }
+    }
+
+    // NUEVA FUNCIÓN: Actualizar contenido de pantalla TV Madre
+    async function actualizarPantallaTVMadre() {
+      // Actualizar fecha y hora
+      actualizarFechaHoraTVMadre();
+      
+      // Cargar estadísticas generales
+      await cargarEstadisticasTVMadre();
+      
+      // Cargar información de ollas activas
+      cargarOllasActivasTVMadre();
+      
+      // Cargar información de programación
+      await cargarProgramacionTVMadre();
+      
+      // Cargar información de empaque
+      await cargarEmpaqueTVMadre();
+    }
+
+    // NUEVA FUNCIÓN: Cargar estadísticas generales para TV Madre
+    async function cargarEstadisticasTVMadre() {
+      const hoy = new Date().toISOString().split('T')[0];
+      
+      try {
+        // Obtener todos los registros del día
+        const { data: registrosData, error: registrosError } = await supabase
+          .from('registros')
+          .select('*')
+          .eq('fecha', hoy);
+        
+        if (registrosError) throw registrosError;
+        
+        let totalPaquetes = 0;
+        let totalOllas = 0;
+        let productosProducidos = new Set();
+        
+        if (registrosData) {
+          registrosData.forEach(reg => {
+            totalOllas++;
+            
+            if (reg.empaques && reg.empaques.length > 0) {
+              reg.empaques.forEach(empaque => {
+                totalPaquetes += parseInt(empaque.cantidad) || 0;
+                productosProducidos.add(empaque.producto);
+              });
+            }
+          });
+        }
+        
+        // Obtener procesos activos
+        const ollasActivas = Object.values(procesosActivos).filter(p => p.estado !== 'completado').length;
+        
+        // Crear tarjetas de totales
+        const totalesContainer = document.getElementById('tv-madre-totales');
+        totalesContainer.innerHTML = `
+          <div class="tv-madre-total-card">
+            <div class="tv-madre-total-label">Total Paquetes Hoy</div>
+            <div class="tv-madre-total-value">${totalPaquetes}</div>
+          </div>
+          <div class="tv-madre-total-card">
+            <div class="tv-madre-total-label">Ollas Completadas</div>
+            <div class="tv-madre-total-value">${totalOllas}</div>
+          </div>
+          <div class="tv-madre-total-card">
+            <div class="tv-madre-total-label">Ollas Activas</div>
+            <div class="tv-madre-total-value">${ollasActivas}</div>
+          </div>
+          <div class="tv-madre-total-card">
+            <div class="tv-madre-total-label">Productos Producidos</div>
+            <div class="tv-madre-total-value">${productosProducidos.size}</div>
+          </div>
+        `;
+      } catch (error) {
+        console.error("Error al cargar estadísticas TV Madre:", error);
+      }
+    }
+
+    // NUEVA FUNCIÓN: Cargar ollas activas para TV Madre
+    function cargarOllasActivasTVMadre() {
+      const gridContainer = document.getElementById('tv-madre-grid');
+      let gridHTML = '';
+      
+      const ollasActivas = Object.values(procesosActivos).filter(p => p.estado !== 'completado');
+      
+      if (ollasActivas.length === 0) {
+        gridHTML += `
+          <div class="tv-madre-card">
+            <div class="tv-madre-card-title">
+              <i class="fas fa-fire"></i> Ollas en Proceso
+            </div>
+            <div class="tv-madre-empty-state">
+              <i class="fas fa-fire"></i>
+              <div>No hay ollas activas</div>
+            </div>
+          </div>
+        `;
+      } else {
+        gridHTML += `
+          <div class="tv-madre-card">
+            <div class="tv-madre-card-title">
+              <i class="fas fa-fire"></i> Ollas en Proceso
+            </div>
+            <div class="tv-madre-card-content">
+        `;
+        
+        ollasActivas.forEach(proceso => {
+          let estado = '';
+          let claseEstado = '';
+          
+          if (proceso.estado === 'coccion') {
+            estado = 'En Cocción';
+            claseEstado = 'tv-madre-status-coccion';
+          } else if (proceso.estado === 'formado') {
+            estado = 'En Formado';
+            claseEstado = 'tv-madre-status-formado';
+          } else if (proceso.estado === 'empaque') {
+            estado = 'En Empaque';
+            claseEstado = 'tv-madre-status-empaque';
+          }
+          
+          // Calcular tiempo transcurrido
+          let tiempoTranscurrido = '--';
+          if (proceso.estado === 'coccion' && proceso.inicioCoccion) {
+            const inicio = new Date(proceso.inicioCoccion);
+            const ahora = new Date();
+            tiempoTranscurrido = calcularDuracion(inicio, ahora);
+          } else if (proceso.estado === 'formado' && proceso.inicioFormado) {
+            const inicio = new Date(proceso.inicioFormado);
+            const ahora = new Date();
+            tiempoTranscurrido = calcularDuracion(inicio, ahora);
+          } else if (proceso.estado === 'empaque' && proceso.inicioEmpaque) {
+            const inicio = new Date(proceso.inicioEmpaque);
+            const ahora = new Date();
+            tiempoTranscurrido = calcularDuracion(inicio, ahora);
+          }
+          
+          // Contar productos
+          const numProductos = proceso.productos ? proceso.productos.length : 0;
+          
+          gridHTML += `
+            <div class="tv-madre-item">
+              <div class="tv-madre-item-label">Olla ${proceso.olla} - Lote ${proceso.lote}</div>
+              <div class="tv-madre-item-value">
+                <span class="tv-madre-status-badge ${claseEstado}">${estado}</span>
+                <div style="font-size: 28px; margin-top: 5px;">
+                  ${tiempoTranscurrido} | ${numProductos} productos
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        
+        gridHTML += `
+            </div>
+          </div>
+        `;
+      }
+      
+      gridContainer.innerHTML = gridHTML;
+    }
+
+    // NUEVA FUNCIÓN: Cargar programación para TV Madre
+    async function cargarProgramacionTVMadre() {
+      const gridContainer = document.getElementById('tv-madre-grid');
+      
+      try {
+        // Obtener programación del día actual
+        const { data: programacionData, error } = await supabase
+          .from('programacion')
+          .select('*')
+          .eq('fecha', currentDay);
+        
+        if (error) throw error;
+        
+        let programacionHTML = `
+          <div class="tv-madre-card">
+            <div class="tv-madre-card-title">
+              <i class="fas fa-clipboard-list"></i> Programación del Día
+            </div>
+            <div class="tv-madre-card-content">
+        `;
+        
+        if (!programacionData || programacionData.length === 0) {
+          programacionHTML += `
+            <div class="tv-madre-empty-state">
+              <i class="fas fa-clipboard-list"></i>
+              <div>No hay programación para hoy</div>
+            </div>
+          `;
+        } else {
+          // Calcular total de cajas programadas
+          let totalCajasProgramadas = 0;
+          let productosProgramados = 0;
+          
+          programacionData.forEach(item => {
+            let cajasItem = 0;
+            if (item.empaques && item.empaques.length > 0) {
+              cajasItem = item.empaques.reduce((sum, e) => sum + parseInt(e.cantidad), 0);
+            } else {
+              cajasItem = item.cajas || 0;
+            }
+            
+            totalCajasProgramadas += cajasItem;
+            productosProgramados++;
+            
+            // Verificar estado de la programación
+            const procesoProgramacion = Object.values(programacionProcesos).find(p => p.id_programacion === item.id);
+            let estado = '';
+            let claseEstado = '';
+            
+            if (procesoProgramacion) {
+              if (procesoProgramacion.fin_proceso) {
+                estado = 'Completado';
+                claseEstado = 'tv-madre-status-completado';
+              } else {
+                estado = 'En Proceso';
+                claseEstado = 'tv-madre-status-formado';
+              }
+            } else {
+              estado = 'Pendiente';
+              claseEstado = 'tv-madre-status-coccion';
+            }
+            
+            programacionHTML += `
+              <div class="tv-madre-item">
+                <div class="tv-madre-item-label">${item.producto}</div>
+                <div class="tv-madre-item-value">
+                  <span class="tv-madre-status-badge ${claseEstado}">${estado}</span>
+                  <div style="font-size: 28px; margin-top: 5px;">
+                    ${cajasItem} cajas | ${item.molde || '--'}
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+          
+          // Agregar resumen
+          programacionHTML += `
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.15); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 32px;">
+                <div>Total Programado:</div>
+                <div style="font-weight: 800; color: #FFD700;">${totalCajasProgramadas} cajas</div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 28px; margin-top: 10px;">
+                <div>Productos:</div>
+                <div>${productosProgramados}</div>
+              </div>
+            </div>
+          `;
+        }
+        
+        programacionHTML += `
+            </div>
+          </div>
+        `;
+        
+        // Agregar al grid
+        gridContainer.innerHTML += programacionHTML;
+      } catch (error) {
+        console.error("Error al cargar programación TV Madre:", error);
+      }
+    }
+
+    // NUEVA FUNCIÓN: Cargar información de empaque para TV Madre
+    async function cargarEmpaqueTVMadre() {
+      const gridContainer = document.getElementById('tv-madre-grid');
+      
+      try {
+        // Obtener registros del día para empaque
+        const hoy = new Date().toISOString().split('T')[0];
+        const { data: registrosData, error } = await supabase
+          .from('registros')
+          .select('*')
+          .eq('fecha', hoy);
+        
+        if (error) throw error;
+        
+        let empaqueHTML = `
+          <div class="tv-madre-card">
+            <div class="tv-madre-card-title">
+              <i class="fas fa-box"></i> Empaque Hoy
+            </div>
+            <div class="tv-madre-card-content">
+        `;
+        
+        if (!registrosData || registrosData.length === 0) {
+          empaqueHTML += `
+            <div class="tv-madre-empty-state">
+              <i class="fas fa-box"></i>
+              <div>No hay empaques registrados hoy</div>
+            </div>
+          `;
+        } else {
+          // Agrupar empaques por producto
+          const empaquesPorProducto = {};
+          let totalPaquetesHoy = 0;
+          
+          registrosData.forEach(reg => {
+            if (reg.empaques && reg.empaques.length > 0) {
+              reg.empaques.forEach(empaque => {
+                if (!empaquesPorProducto[empaque.producto]) {
+                  empaquesPorProducto[empaque.producto] = {
+                    total: 0,
+                    tipos: {}
+                  };
+                }
+                
+                empaquesPorProducto[empaque.producto].total += parseInt(empaque.cantidad) || 0;
+                totalPaquetesHoy += parseInt(empaque.cantidad) || 0;
+                
+                if (!empaquesPorProducto[empaque.producto].tipos[empaque.tipoEmpaque]) {
+                  empaquesPorProducto[empaque.producto].tipos[empaque.tipoEmpaque] = 0;
+                }
+                empaquesPorProducto[empaque.producto].tipos[empaque.tipoEmpaque] += parseInt(empaque.cantidad) || 0;
+              });
+            }
+          });
+          
+          // Mostrar productos empaquetados
+          Object.keys(empaquesPorProducto).forEach(producto => {
+            const datos = empaquesPorProducto[producto];
+            
+            empaqueHTML += `
+              <div class="tv-madre-producto-item">
+                <div class="tv-madre-producto-nombre">${producto}</div>
+                <div class="tv-madre-producto-details">
+                  <div>Total: ${datos.total} paquetes</div>
+                  <div>${Object.keys(datos.tipos).length} tipos</div>
+                </div>
+              </div>
+            `;
+          });
+          
+          // Agregar resumen
+          empaqueHTML += `
+            <div style="margin-top: 20px; padding: 15px; background: rgba(255, 255, 255, 0.15); border-radius: 12px;">
+              <div style="display: flex; justify-content: space-between; font-size: 32px;">
+                <div>Total Empaquetado Hoy:</div>
+                <div style="font-weight: 800; color: #FFD700;">${totalPaquetesHoy} paquetes</div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 28px; margin-top: 10px;">
+                <div>Productos:</div>
+                <div>${Object.keys(empaquesPorProducto).length}</div>
+              </div>
+            </div>
+          `;
+        }
+        
+        empaqueHTML += `
+            </div>
+          </div>
+        `;
+        
+        // Agregar al grid
+        gridContainer.innerHTML += empaqueHTML;
+      } catch (error) {
+        console.error("Error al cargar empaque TV Madre:", error);
+      }
+    }
+
+    // NUEVA FUNCIÓN: Cargar programación en pantalla de TV
+    async function cargarContenidoTVProgramacion() {
+      // Actualizar la fecha en la pantalla de TV
+      const fechaHoy = formatDate(new Date());
+      document.getElementById('tv-fecha-hoy').textContent = fechaHoy;
+      
+      await actualizarListaProgramacionTV();
+    }
+
+    // FUNCIÓN CORREGIDA PARA LA PANTALLA TV - AHORA SOLO MUESTRA UNA COLUMNA DE TOTAL DE CAJAS
+    async function actualizarListaProgramacionTV() {
+      const tvTablaBody = document.getElementById('tv-tabla-programacion-body');
+      tvTablaBody.innerHTML = '';
+      
+      try {
+        // En la pantalla TV solo se muestra la programación del día actual
+        const { data: programacionData, error } = await supabase
+          .from('programacion')
+          .select('*')
+          .eq('fecha', currentDay);
+        
+        if (error) throw error;
+        
+        if (!programacionData || programacionData.length === 0) {
+          document.getElementById('tv-tabla-programacion').style.display = 'none';
+          document.getElementById('tv-sin-programacion').style.display = 'block';
+          return;
+        }
+        
+        document.getElementById('tv-tabla-programacion').style.display = 'table';
+        document.getElementById('tv-sin-programacion').style.display = 'none';
+        
+        programacionData.forEach(item => {
+          // Calcular total de cajas programadas (suma de todos los empaques)
+          let totalCajasProgramadas = 0;
+          if (item.empaques && item.empaques.length > 0) {
+            totalCajasProgramadas = item.empaques.reduce((sum, e) => sum + parseInt(e.cantidad), 0);
+          } else {
+            totalCajasProgramadas = item.cajas || 0;
+          }
+          
+          const fila = document.createElement('tr');
+          fila.className = 'tv-producto-grupo';
+          fila.innerHTML = `
+            <td>${item.producto}</td>
+            <td>${item.molde || '--'}</td>
+            <td>${item.peso || '--'} oz</td>
+            <td>${totalCajasProgramadas}</td>
+          `;
+          
+          tvTablaBody.appendChild(fila);
+        });
+      } catch (error) {
+        console.error("Error al cargar programación TV:", error);
+        document.getElementById('tv-tabla-programacion').style.display = 'none';
+        document.getElementById('tv-sin-programacion').style.display = 'block';
+      }
+    }
+
+    // NUEVA FUNCIÓN: Cargar empaque en pantalla de TV
+    function cargarContenidoTVEmpaque() {
+      // Actualizar la fecha en la pantalla de TV
+      const fechaHoy = formatDate(new Date());
+      document.getElementById('tv-empaque-fecha-hoy').textContent = fechaHoy;
+      
+      actualizarListaEmpaqueTV();
+    }
+
+    // NUEVA FUNCIÓN CORREGIDA PARA ACTUALIZAR PANTALLA TV EMPAQUE - CON LÍNEA AZUL PARA CADA PRODUCTO
+    async function actualizarListaEmpaqueTV() {
+      const tvTablaBody = document.getElementById('tv-tabla-empaque-body');
+      tvTablaBody.innerHTML = '';
+      
+      try {
+        // Obtener la programación del día actual
+        const { data: programacionData, error } = await supabase
+          .from('programacion')
+          .select('*')
+          .eq('fecha', currentDay);
+        
+        if (error) throw error;
+        
+        if (!programacionData || programacionData.length === 0) {
+          document.getElementById('tv-tabla-empaque').style.display = 'none';
+          document.getElementById('tv-sin-empaque').style.display = 'block';
+          return;
+        }
+        
+        document.getElementById('tv-tabla-empaque').style.display = 'table';
+        document.getElementById('tv-sin-empaque').style.display = 'none';
+        
+        // Para cada producto en la programación, mostrar cada tipo de empaque en una fila separada
+        programacionData.forEach(item => {
+          // Si hay empaques específicos, mostrar cada uno en una fila separada
+          if (item.empaques && item.empaques.length > 0) {
+            // Agregar una fila por cada empaque, pero la primera fila de cada producto tendrá la clase tv-producto-grupo
+            item.empaques.forEach((empaque, index) => {
+              // Obtener el peso específico para TV Empaque (con unidades mixtas)
+              const pesoPaquete = pesosEmpaqueTV[item.producto] || '';
+              
+              const fila = document.createElement('tr');
+              // Solo la primera fila del producto tendrá la clase tv-producto-grupo
+              if (index === 0) {
+                fila.className = 'tv-producto-grupo';
+              }
+              fila.innerHTML = `
+                <td>${item.producto}</td>
+                <td>${empaque.tipo}</td>
+                <td>${pesoPaquete}</td>
+                <td>${empaque.cantidad}</td>
+              `;
+              
+              tvTablaBody.appendChild(fila);
+            });
+          } else {
+            // Si no hay empaques específicos, mostrar una fila con el total de cajas
+            const pesoPaquete = pesosEmpaqueTV[item.producto] || '';
+            const fila = document.createElement('tr');
+            fila.className = 'tv-producto-grupo'; // Esta es la única fila para este producto
+            fila.innerHTML = `
+              <td>${item.producto}</td>
+              <td>Sin empaque específico</td>
+              <td>${pesoPaquete}</td>
+              <td>${item.cajas || 0}</td>
+            `;
+            tvTablaBody.appendChild(fila);
+          }
+        });
+      } catch (error) {
+        console.error("Error al cargar empaque TV:", error);
+        document.getElementById('tv-tabla-empaque').style.display = 'none';
+        document.getElementById('tv-sin-empaque').style.display = 'block';
+      }
+    }
+
+    // NUEVA FUNCIÓN: Verificar parámetros de URL al cargar la aplicación
+    function verificarParametrosURL() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const screenParam = urlParams.get('screen');
+      
+      if (screenParam) {
+        switch(screenParam) {
+          case 'tv-programacion':
+            abrirPantallaTVProgramacion();
+            break;
+          case 'tv-empaque':
+            abrirPantallaTVEmpaque();
+            break;
+          case 'tv-madre':
+            abrirPantallaTVMadre();
+            break;
+          case 'cocinar':
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.querySelector('[data-screen="cocinar"]').classList.add('active');
+            document.getElementById('cocinar-screen').classList.add('active');
+            document.querySelector('.app-bar').style.backgroundColor = '#4CAF50';
+            break;
+          case 'formado':
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.querySelector('[data-screen="formado"]').classList.add('active');
+            document.getElementById('formado-screen').classList.add('active');
+            document.querySelector('.app-bar').style.backgroundColor = '#FF9800';
+            break;
+          case 'empaque':
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.querySelector('[data-screen="empaque"]').classList.add('active');
+            document.getElementById('empaque-screen').classList.add('active');
+            document.querySelector('.app-bar').style.backgroundColor = '#F44336';
+            break;
+          case 'programacion':
+            document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.querySelector('[data-screen="programacion"]').classList.add('active');
+            document.getElementById('programacion-screen').classList.add('active');
+            document.querySelector('.app-bar').style.backgroundColor = '#2196F3';
+            break;
+        }
+      }
+    }
+
+    // 4. CONFIGURACIÓN DE EVENTOS
+    function configurarEventos() {
+      // Navegación entre pantallas
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+          const screenId = this.getAttribute('data-screen') + '-screen';
+          
+          document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+          document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+          
+          this.classList.add('active');
+          document.getElementById(screenId).classList.add('active');
+          document.querySelector('.app-bar').style.backgroundColor = 
+            getComputedStyle(document.getElementById(screenId)).getPropertyValue('--color-primario');
+          
+          if (screenId === 'historico-screen') {
+            cargarHistorico();
+          }
+          
+          if (screenId === 'programacion-screen') {
+            cargarProgramacion();
+            actualizarFechaProgramacion();
+          }
+          
+          // Detener actualización automática si no estamos en TV Madre
+          if (screenId !== 'tv-madre-screen' && tvMadreActualizacionInterval) {
+            clearInterval(tvMadreActualizacionInterval);
+            tvMadreActualizacionInterval = null;
+          }
+        });
+      });
+
+      // Botón Iniciar Cocción
+      document.getElementById('iniciar-coccion').addEventListener('click', async function() {
+        const ollaSeleccionada = parseInt(document.getElementById('olla').value);
+        
+        if (!ollaSeleccionada || ollaSeleccionada < 1 || ollaSeleccionada > 9) {
+          mostrarNotificacion("No hay ollas disponibles o número de olla inválido", "error");
+          return;
+        }
+        
+        if (ollasUsadasHoy.includes(ollaSeleccionada)) {
+          mostrarNotificacion(`La olla ${ollaSeleccionada} ya fue utilizada hoy`, "warning");
+          return;
+        }
+        
+        ollasUsadasHoy.push(ollaSeleccionada);
+        actualizarOllasUsadas(ollasUsadasHoy);
+        
+        // Guardar ollas usadas hoy en Supabase
+        const hoy = new Date().toISOString().split('T')[0];
+        try {
+          await supabase
+            .from('config')
+            .upsert({
+              clave: `ollas_${hoy}`,
+              valor: JSON.stringify(ollasUsadasHoy)
+            });
+        } catch (error) {
+          console.error("Error al guardar ollas usadas:", error);
+        }
+        
+        inicioCoccion = new Date();
+        const inicioCoccionStr = formatDateTime(inicioCoccion);
+        
+        const nuevoProceso = {
+          lote: currentLote,
+          olla: ollaSeleccionada,
+          estado: 'coccion',
+          inicioCoccion: inicioCoccionStr,
+          created_at: new Date().toISOString()
+        };
+        
+        try {
+          const { data, error } = await supabase
+            .from('procesos')
+            .insert([nuevoProceso])
+            .select()
+            .single();
+          
+          if (error) throw error;
+          
+          currentProcessId = data.id;
+          mostrarNotificacion(`Cocción iniciada para lote ${currentLote} en olla ${ollaSeleccionada}`);
+          
+          currentLote = generarSiguienteLote(currentLote);
+          document.getElementById('lote').value = currentLote;
+          
+          // Guardar último lote en Supabase
+          await supabase
+            .from('config')
+            .upsert({
+              clave: 'ultimoLote',
+              valor: currentLote
+            });
+            
+          actualizarSiguienteOlla();
+        } catch (error) {
+          console.error("Error al iniciar cocción:", error);
+          mostrarNotificacion("Error al iniciar la cocción", "error");
+        }
+      });
+
+      // Seleccionar olla en formado
+      document.getElementById('select-olla-formado').addEventListener('change', function() {
+        const procesoId = this.value;
+        if (!procesoId) {
+          document.getElementById('info-olla-formado').style.display = 'none';
+          document.getElementById('agregar-producto-form').style.display = 'none';
+          document.getElementById('productos-formado').style.display = 'none';
+          document.getElementById('lote-formado-input').value = '';
+          return;
+        }
+        
+        const proceso = procesosActivos[procesoId];
+        if (!proceso) return;
+        
+        currentProcessId = procesoId;
+        currentLote = proceso.lote;
+        currentOlla = proceso.olla;
+        
+        document.getElementById('info-olla-formado').style.display = 'block';
+        document.getElementById('lote-formado').textContent = proceso.lote;
+        document.getElementById('lote-formado-input').value = proceso.lote;
+        document.getElementById('olla-formado').textContent = `Olla ${proceso.olla}`;
+        
+        let estado = '';
+        if (proceso.estado === 'formado') {
+          estado = `<span class="status-badge status-formado">En Formado</span>`;
+        } else if (proceso.estado === 'empaque') {
+          estado = `<span class="status-badge status-empaque">En Empaque</span>`;
+        }
+        document.getElementById('estado-formado').innerHTML = estado;
+        
+        document.getElementById('agregar-producto-form').style.display = 'block';
+        document.getElementById('productos-formado').style.display = 'block';
+        
+        // Mostrar u ocultar botón de iniciar empaque según el estado
+        if (proceso.estado === 'empaque') {
+          document.getElementById('iniciar-empaque').style.display = 'none';
+        } else {
+          document.getElementById('iniciar-empaque').style.display = 'block';
+        }
+        
+        cargarProductosFormado(procesoId);
+      });
+
+      // Botón Agregar Producto
+      document.getElementById('agregar-producto').addEventListener('click', async function() {
+        if (!currentProcessId) {
+          mostrarNotificacion("No hay un proceso activo para este lote", "error");
+          return;
+        }
+        
+        const producto = document.getElementById('producto').value;
+        
+        if (!producto) {
+          mostrarNotificacion("Seleccione el tipo de arepa", "error");
+          return;
+        }
+        
+        const nuevoProducto = {
+          nombre: producto,
+          fecha: formatDateTime(new Date())
+        };
+        
+        const proceso = procesosActivos[currentProcessId];
+        const productosActuales = proceso.productos || [];
+        
+        if (productosActuales.some(p => p.nombre === producto)) {
+          mostrarNotificacion("Este producto ya fue agregado", "warning");
+          return;
+        }
+        
+        productosActuales.push(nuevoProducto);
+        
+        try {
+          const { error } = await supabase
+            .from('procesos')
+            .update({
+              productos: productosActuales,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', currentProcessId);
+          
+          if (error) throw error;
+          
+          mostrarNotificacion(`Producto ${producto} agregado`);
+          document.getElementById('producto').value = '';
+          cargarProductosFormado(currentProcessId);
+        } catch (error) {
+          console.error("Error al agregar producto:", error);
+          mostrarNotificacion("Error al agregar el producto", "error");
+        }
+      });
+
+      // Botón Iniciar Empaque
+      document.getElementById('iniciar-empaque').addEventListener('click', async function() {
+        if (!currentProcessId) {
+          mostrarNotificacion("No hay un proceso activo para este lote", "error");
+          return;
+        }
+        
+        const proceso = procesosActivos[currentProcessId];
+        
+        inicioEmpaque = new Date();
+        const inicioEmpaqueStr = formatDateTime(inicioEmpaque);
+        
+        try {
+          const { error } = await supabase
+            .from('procesos')
+            .update({
+              estado: 'empaque',
+              inicioEmpaque: inicioEmpaqueStr,
+              empaques: proceso.empaques || [],
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', currentProcessId);
+          
+          if (error) throw error;
+          
+          mostrarNotificacion(`Empaque iniciado para olla ${proceso.olla}`);
+          
+          // Actualizar la lista de ollas en empaque
+          actualizarSelectOllas();
+          
+          // Navegar a la pantalla de empaque
+          document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+          document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+          document.querySelector('[data-screen="empaque"]').classList.add('active');
+          document.getElementById('empaque-screen').classList.add('active');
+          document.querySelector('.app-bar').style.backgroundColor = '#F44336';
+          
+          // Seleccionar automáticamente la olla en empaque
+          document.getElementById('select-olla-empaque').value = currentProcessId;
+          const event = new Event('change');
+          document.getElementById('select-olla-empaque').dispatchEvent(event);
+          
+          // Generar etiquetas si hay productos
+          generarEtiquetasProductos(proceso);
+        } catch (error) {
+          console.error("Error al iniciar empaque:", error);
+          mostrarNotificacion("Error al iniciar el empaque", "error");
+        }
+      });
+
+      // Seleccionar olla en empaque
+      document.getElementById('select-olla-empaque').addEventListener('change', function() {
+        const procesoId = this.value;
+        if (!procesoId) {
+          document.getElementById('info-olla-empaque').style.display = 'none';
+          document.getElementById('empaques-registrados').style.display = 'none';
+          document.getElementById('productos-empaque-container').style.display = 'none';
+          document.getElementById('etiquetas-container').style.display = 'none';
+          document.getElementById('finalizar-proceso').disabled = true;
+          document.getElementById('finalizar-producto').disabled = true;
+          document.getElementById('select-producto-empaque').disabled = true;
+          document.getElementById('tipo-empaque').disabled = true;
+          document.getElementById('agregar-empaque').disabled = true;
+          return;
+        }
+        
+        const proceso = procesosActivos[procesoId];
+        if (!proceso) return;
+        
+        currentProcessId = procesoId;
+        currentLote = proceso.lote;
+        currentOlla = proceso.olla;
+        
+        document.getElementById('info-olla-empaque').style.display = 'block';
+        document.getElementById('lote-empaque').textContent = proceso.lote;
+        document.getElementById('olla-empaque').textContent = `Olla ${proceso.olla}`;
+        document.getElementById('estado-empaque').innerHTML = `<span class="status-badge status-empaque">En Empaque</span>`;
+        
+        document.getElementById('empaques-registrados').style.display = 'block';
+        document.getElementById('productos-empaque-container').style.display = 'block';
+        actualizarInfoEmpaque(proceso);
+        actualizarSelectProductosEmpaque(proceso);
+        cargarProductosEmpaque(procesoId);
+        cargarEmpaques(procesoId);
+        generarEtiquetasProductos(proceso);
+        
+        document.getElementById('finalizar-proceso').disabled = false;
+      });
+
+      // Seleccionar producto en empaque
+      document.getElementById('select-producto-empaque').addEventListener('change', function() {
+        const producto = this.value;
+        if (!producto) {
+          document.getElementById('tipo-empaque').disabled = true;
+          document.getElementById('agregar-empaque').disabled = true;
+          document.getElementById('finalizar-producto').disabled = true;
+          return;
+        }
+        
+        productoSeleccionadoEmpaque = producto;
+        actualizarTiposEmpaque(producto);
+      });
+
+      // Botón Agregar Empaque
+      document.getElementById('agregar-empaque').addEventListener('click', async function() {
+        if (!currentProcessId) {
+          mostrarNotificacion("No hay un proceso activo para este lote", "error");
+          return;
+        }
+        
+        const cantidad = document.getElementById('cantidad-empaque').value;
+        const tipoEmpaque = document.getElementById('tipo-empaque').value;
+        
+        if (!cantidad || cantidad < 1) {
+          mostrarNotificacion("Ingrese una cantidad válida de paquetes", "error");
+          return;
+        }
+        
+        if (!productoSeleccionadoEmpaque) {
+          mostrarNotificacion("Seleccione un producto para empaquetar", "error");
+          return;
+        }
+        
+        if (!tipoEmpaque) {
+          mostrarNotificacion("Seleccione un tipo de empaque", "error");
+          return;
+        }
+        
+        const proceso = procesosActivos[currentProcessId];
+        if (!proceso.productos || proceso.productos.length === 0) {
+          mostrarNotificacion("No hay productos registrados", "error");
+          return;
+        }
+        
+        const nuevoEmpaque = {
+          producto: productoSeleccionadoEmpaque,
+          tipoEmpaque: tipoEmpaque,
+          cantidad: cantidad,
+          fecha: formatDateTime(new Date())
+        };
+        
+        const empaquesActualizados = [...(proceso.empaques || []), nuevoEmpaque];
+        
+        try {
+          const { error } = await supabase
+            .from('procesos')
+            .update({
+              empaques: empaquesActualizados,
+              updated_at: new Date().toISOString()
+            })
+            .eq('id', currentProcessId);
+          
+          if (error) throw error;
+          
+          mostrarNotificacion(`${cantidad} paquetes de ${productoSeleccionadoEmpaque} (${tipoEmpaque}) registrados`);
+          document.getElementById('cantidad-empaque').value = '';
+          document.getElementById('select-producto-empaque').value = '';
+          document.getElementById('tipo-empaque').value = '';
+          productoSeleccionadoEmpaque = null;
+          document.getElementById('tipo-empaque').disabled = true;
+          document.getElementById('agregar-empaque').disabled = true;
+          document.getElementById('finalizar-producto').disabled = true;
+          
+          cargarProductosEmpaque(currentProcessId);
+          cargarEmpaques(currentProcessId);
+        } catch (error) {
+          console.error("Error al registrar empaque:", error);
+          mostrarNotificacion("Error al registrar el empaque", "error");
+        }
+      });
+
+      // Botón Finalizar Producto
+      document.getElementById('finalizar-producto').addEventListener('click', async function() {
+        if (!currentProcessId || !productoSeleccionadoEmpaque) {
+          mostrarNotificacion("No hay un producto seleccionado para finalizar", "error");
+          return;
+        }
+        
+        const proceso = procesosActivos[currentProcessId];
+        if (!proceso.productos || proceso.productos.length === 0) {
+          mostrarNotificacion("No hay productos registrados para esta olla", "error");
+          return;
+        }
+        
+        // Filtrar el producto de la lista de productos
+        const productosActualizados = proceso.productos.filter(p => p.nombre !== productoSeleccionadoEmpaque);
+        
+        // Guardar registro del producto finalizado
+        const hoy = new Date().toISOString().split('T')[0];
+        const finEmpaque = new Date();
+        
+        // Buscar empaques para este producto
+        const empaquesProducto = (proceso.empaques || []).filter(e => e.producto === productoSeleccionadoEmpaque);
+        const cantidadTotal = empaquesProducto.reduce((sum, e) => sum + parseInt(e.cantidad), 0);
+        
+        const registroProducto = {
+          fecha: hoy,
+          lote: proceso.lote,
+          olla: proceso.olla,
+          producto: productoSeleccionadoEmpaque,
+          cantidad: cantidadTotal,
+          empaques: empaquesProducto,
+          inicioEmpaque: proceso.inicioEmpaque,
+          finEmpaque: formatDateTime(finEmpaque),
+          duracionEmpaque: calcularDuracion(new Date(proceso.inicioEmpaque), finEmpaque),
+          created_at: new Date().toISOString()
+        };
+        
+        try {
+          // Actualizar proceso y guardar registro
+          const promises = [
+            supabase
+              .from('procesos')
+              .update({
+                productos: productosActualizados,
+                updated_at: new Date().toISOString()
+              })
+              .eq('id', currentProcessId),
+            supabase
+              .from('registros')
+              .insert([registroProducto])
+          ];
+          
+          await Promise.all(promises);
+          
+          mostrarNotificacion(`Producto ${productoSeleccionadoEmpaque} finalizado`);
+          
+          // Verificar si hay programación para este producto
+          const { data: programacionData } = await supabase
+            .from('programacion')
+            .select('*')
+            .eq('dia', diaProgramacionActual);
+          
+          if (programacionData) {
+            for (const programacionItem of programacionData) {
+              if (programacionItem.producto === productoSeleccionadoEmpaque) {
+                // Marcar como completado en la programación
+                const { data: procesosData } = await supabase
+                  .from('programacion_procesos')
+                  .select('*')
+                  .eq('id_programacion', programacionItem.id)
+                  .is('fin_proceso', null);
+                
+                if (procesosData && procesosData.length > 0) {
+                  for (const procesoProgramacion of procesosData) {
+                    await supabase
+                      .from('programacion_procesos')
+                      .update({
+                        fin_proceso: formatDateTime(new Date()),
+                        updated_at: new Date().toISOString()
+                      })
+                      .eq('id', procesoProgramacion.id);
+                    
+                    mostrarNotificacion(`Programación para ${programacionItem.producto} marcada como completada`);
+                    await cargarProgramacion(); // Actualizar la vista de programación
+                  }
+                }
+              }
+            }
+          }
+          
+          // Limpiar selección
+          productoSeleccionadoEmpaque = null;
+          document.getElementById('select-producto-empaque').value = '';
+          document.getElementById('tipo-empaque').value = '';
+          document.getElementById('tipo-empaque').disabled = true;
+          document.getElementById('agregar-empaque').disabled = true;
+          document.getElementById('finalizar-producto').disabled = true;
+          
+          // Actualizar listas
+          cargarProductosFormado(currentProcessId);
+          cargarProductosEmpaque(currentProcessId);
+          actualizarSelectProductosEmpaque(procesosActivos[currentProcessId]);
+          cargarEmpaques(currentProcessId);
+          generarEtiquetasProductos(procesosActivos[currentProcessId]);
+        } catch (error) {
+          console.error("Error al finalizar producto:", error);
+          mostrarNotificacion("Error al finalizar el producto", "error");
+        }
+      });
+
+      // Botón Finalizar Proceso - CORREGIDO
+      document.getElementById('finalizar-proceso').addEventListener('click', async function() {
+        if (!currentProcessId) {
+          mostrarNotificacion("No hay un proceso activo para este lote", "error");
+          return;
+        }
+        
+        const proceso = procesosActivos[currentProcessId];
+        
+        // Verificar si hay empaques registrados (aunque los productos ya hayan sido finalizados)
+        if (!proceso.empaques || proceso.empaques.length === 0) {
+          mostrarNotificacion("No hay empaques registrados para esta olla", "warning");
+          return;
+        }
+        
+        if (!confirm(`¿Está seguro que desea finalizar completamente el proceso para la olla ${proceso.olla}?`)) {
+          return;
+        }
+        
+        finEmpaque = new Date();
+        const finEmpaqueStr = formatDateTime(finEmpaque);
+        const duracionTotalStr = calcularDuracion(new Date(proceso.inicioFormado), finEmpaque);
+        
+        const registro = {
+          fecha: new Date().toISOString().split('T')[0],
+          lote: proceso.lote,
+          olla: proceso.olla,
+          inicioCoccion: proceso.inicioCoccion,
+          finCoccion: proceso.finCoccion,
+          duracionCoccion: proceso.duracionCoccion,
+          inicioFormado: proceso.inicioFormado,
+          inicioEmpaque: proceso.inicioEmpaque,
+          finProceso: finEmpaqueStr,
+          duracionTotal: duracionTotalStr,
+          empaques: proceso.empaques,
+          created_at: new Date().toISOString()
+        };
+        
+        try {
+          const promises = [
+            supabase
+              .from('registros')
+              .insert([registro]),
+            supabase
+              .from('procesos')
+              .delete()
+              .eq('id', currentProcessId),
+            supabase
+              .from('config')
+              .upsert({
+                clave: 'ultimoLote',
+                valor: proceso.lote
+              })
+          ];
+          
+          await Promise.all(promises);
+          
+          document.getElementById('select-olla-empaque').value = '';
+          document.getElementById('info-olla-empaque').style.display = 'none';
+          document.getElementById('empaques-registrados').style.display = 'none';
+          document.getElementById('productos-empaque-container').style.display = 'none';
+          document.getElementById('etiquetas-container').style.display = 'none';
+          
+          mostrarNotificacion(`Proceso finalizado para lote ${proceso.lote}`);
+          
+          currentLote = generarSiguienteLote(proceso.lote);
+          document.getElementById('lote').value = currentLote;
+          actualizarSiguienteOlla();
+        } catch (error) {
+          console.error("Error al finalizar proceso:", error);
+          mostrarNotificacion("Error al finalizar el proceso", "error");
+        }
+      });
+
+      // Botón Reiniciar Ollas
+      document.getElementById('reiniciar-ollas').addEventListener('click', async function() {
+        if (confirm("¿Está seguro que desea reiniciar las ollas usadas hoy? Esto no afectará las ollas en proceso de formado o empaque.")) {
+          const hoy = new Date().toISOString().split('T')[0];
+          
+          try {
+            // Obtener ollas usadas hoy
+            const { data: ollasData } = await supabase
+              .from('config')
+              .select('valor')
+              .eq('clave', `ollas_${hoy}`)
+              .single();
+            
+            const ollasUsadas = ollasData ? JSON.parse(ollasData.valor) : [];
+            
+            // Eliminar solo los procesos de cocción (no los de formado o empaque)
+            const { data: procesosData } = await supabase
+              .from('procesos')
+              .select('*');
+            
+            if (procesosData) {
+              for (const proceso of procesosData) {
+                if (proceso.estado === 'coccion') {
+                  await supabase
+                    .from('procesos')
+                    .delete()
+                    .eq('id', proceso.id);
+                }
+              }
+            }
+            
+            // Reiniciar ollas usadas
+            await supabase
+              .from('config')
+              .upsert({
+                clave: `ollas_${hoy}`,
+                valor: JSON.stringify([])
+              });
+            
+            ollasUsadasHoy = [];
+            actualizarOllasUsadas([]);
+            mostrarNotificacion("Ollas reiniciadas para hoy (excepto las en formado/empaque)");
+            actualizarSiguienteOlla();
+          } catch (error) {
+            console.error("Error al reiniciar ollas:", error);
+            mostrarNotificacion("Error al reiniciar ollas", "error");
+          }
+        }
+      });
+
+      // Botón Ver Excel en Google Sheets
+      document.getElementById('ver-excel').addEventListener('click', function() {
+        window.open('https://docs.google.com/spreadsheets/d/1yMcM2fqa4Ux8D4ajMgkKcuRs_Jz9mrtNzsabREEutIU/edit?usp=sharing', '_blank');
+      });
+
+      // Botón Cerrar Histórico
+      document.getElementById('cerrar-historico').addEventListener('click', function() {
+        document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+        document.getElementById('empaque-screen').classList.add('active');
+        document.querySelector('.app-bar').style.backgroundColor = getComputedStyle(document.getElementById('empaque-screen')).getPropertyValue('--color-primario');
+        
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        document.querySelector('[data-screen="empaque"]').classList.add('active');
+      });
+
+      // Botón Cerrar Programación
+      document.getElementById('cerrar-programacion').addEventListener('click', function() {
+        document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+        document.getElementById('empaque-screen').classList.add('active');
+        document.querySelector('.app-bar').style.backgroundColor = getComputedStyle(document.getElementById('empaque-screen')).getPropertyValue('--color-primario');
+        
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        document.querySelector('[data-screen="empaque"]').classList.add('active');
+      });
+
+      // Buscar en histórico
+      document.getElementById('buscar-historico').addEventListener('input', cargarHistorico);
+      document.getElementById('filter-producto').addEventListener('change', cargarHistorico);
+
+      // EVENTOS ESPECÍFICOS DE PROGRAMACIÓN
+      // Botón Agregar Programación
+      document.getElementById('agregar-programacion').addEventListener('click', agregarProgramacion);
+      
+      // Botón Borrar Toda la Programación
+      document.getElementById('borrar-toda-programacion').addEventListener('click', borrarTodaProgramacion);
+      
+      // Botones TV Programación y Empaque - CORREGIDOS
+      document.getElementById('abrir-tv-programacion-desde-programacion').addEventListener('click', abrirPantallaTVProgramacion);
+      document.getElementById('abrir-tv-empaque-desde-programacion').addEventListener('click', abrirPantallaTVEmpaque);
+      
+      // NUEVO BOTÓN: TV Madre
+      document.getElementById('abrir-tv-madre-desde-programacion').addEventListener('click', abrirPantallaTVMadre);
+
+      // CORREGIDO: Autocompletar peso cuando se selecciona un producto en programación
+      document.getElementById('producto-programacion').addEventListener('change', function() {
+        const producto = this.value;
+        
+        // Mostrar/ocultar campo de producto personalizado
+        if (producto === "Otro") {
+          document.getElementById('producto-personalizado-container').style.display = 'block';
+          document.getElementById('peso-programacion').value = '';
+        } else {
+          document.getElementById('producto-personalizado-container').style.display = 'none';
+          const peso = pesosProductos[producto] || '';
+          document.getElementById('peso-programacion').value = peso;
+          
+          // Actualizar opciones de empaque según el producto
+          generarOpcionesEmpaques(producto, 'tipo-empaque-programacion');
+        }
+      });
+
+      // NUEVOS EVENTOS PARA EMPAQUES EN PROGRAMACIÓN
+      document.getElementById('agregar-empaque-programacion').addEventListener('click', function() {
+        const tipoEmpaque = document.getElementById('tipo-empaque-programacion').value;
+        const cantidad = document.getElementById('cantidad-empaque-programacion').value;
+        
+        if (!tipoEmpaque) {
+          mostrarNotificacion("Seleccione el tipo de empaque", "error");
+          return;
+        }
+        
+        if (!cantidad || cantidad < 1) {
+          mostrarNotificacion("Ingrese una cantidad válida", "error");
+          return;
+        }
+        
+        agregarEmpaqueALista('empaques-programacion-lista', tipoEmpaque, cantidad);
+        
+        document.getElementById('tipo-empaque-programacion').value = '';
+        document.getElementById('cantidad-empaque-programacion').value = '';
+      });
+      
+      // NUEVO EVENTO PARA EL BOTÓN DESPLEGABLE DE ENLACES
+      document.getElementById('toggle-share-links').addEventListener('click', function() {
+        const container = document.getElementById('share-links-container');
+        if (container.classList.contains('expanded')) {
+          container.classList.remove('expanded');
+          this.classList.add('collapsed');
+        } else {
+          container.classList.add('expanded');
+          this.classList.remove('collapsed');
+        }
+      });
+
+      // NUEVOS EVENTOS PARA COPIAR URLS
+      document.querySelectorAll('.share-link-copy').forEach(button => {
+        button.addEventListener('click', function() {
+          const screenId = this.getAttribute('data-url');
+          const urlElement = document.getElementById(`share-${screenId}-url`);
+          const url = urlElement.textContent;
+          
+          navigator.clipboard.writeText(url)
+            .then(() => {
+              mostrarNotificacion(`URL copiada al portapapeles: ${url}`);
+            })
+            .catch(err => {
+              console.error('Error al copiar URL: ', err);
+              mostrarNotificacion("Error al copiar URL", "error");
+            });
+        });
+      });
+
+      // Toggle modo oscuro
+      document.getElementById('theme-toggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        
+        if (isDark) {
+          this.innerHTML = '<i class="fas fa-sun"></i>';
+          mostrarNotificacion("Modo oscuro activado");
+        } else {
+          this.innerHTML = '<i class="fas fa-moon"></i>';
+          mostrarNotificacion("Modo claro activado");
+        }
+      });
+
+      // Eventos del modal de impresión
+      document.getElementById('print-direct').addEventListener('click', imprimirDirectamente);
+      document.getElementById('print-pdf').addEventListener('click', generarPDF);
+      document.getElementById('print-cancel').addEventListener('click', function() {
+        document.getElementById('print-modal').style.display = 'none';
+      });
+    }
+
+    // 5. INICIALIZACIÓN DE LA APLICACIÓN
+    window.addEventListener('load', function() {
+      cargarConfiguracionInicial();
+      configurarEventos();
+      verificarParametrosURL(); // Verificar parámetros de URL al cargar
+      
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').innerHTML = '<i class="fas fa-sun"></i>';
+      }
+      
+      // Verificar cambio de día cada minuto
+      setInterval(() => {
+        const hoy = new Date().toISOString().split('T')[0];
+        if (hoy !== currentDay) {
+          currentDay = hoy;
+          reiniciarParaNuevoDia();
+        }
+      }, 60000);
+    });
+  </script>
+</body>
+</html>
